@@ -1,0 +1,2 @@
+class CharacterEventsController < ApplicationController
+end

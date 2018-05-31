@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2018_05_30_173153) do
+ActiveRecord::Schema.define(version: 2018_05_31_173157) do
 
   create_table "character_classes", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8", force: :cascade do |t|
     t.integer "power", limit: 1, null: false
@@ -20,6 +20,16 @@ ActiveRecord::Schema.define(version: 2018_05_30_173153) do
     t.text "description"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+  end
+
+  create_table "character_events", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8", force: :cascade do |t|
+    t.datetime "event_date", null: false
+    t.string "event_type", null: false
+    t.text "event_data", null: false
+    t.bigint "characters_id", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["characters_id"], name: "index_character_events_on_characters_id"
   end
 
   create_table "character_natures", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8", force: :cascade do |t|
