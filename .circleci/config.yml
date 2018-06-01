@@ -6,6 +6,8 @@ defaults: &defaults
       - image: circleci/mysql:5.7
         environment:
             - MYSQL_DATABASE=abirato_api_test
+            - MYSQL_ALLOW_EMPTY_PASSWORD=yes
+            - MYSQL_ROOT_PASSWORD=abirato
 
 version: 2
 
@@ -31,7 +33,6 @@ jobs:
       - run:
           name: Load schema and seed DB
           command: |
-            mysqld -h 127.0.0.1 -u abirato abirato_api_test
             RAILS_ENV=test bundle exec rake db:schema:load db:seed --trace
       - run:
           name: Run rspec
