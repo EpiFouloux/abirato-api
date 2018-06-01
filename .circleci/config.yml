@@ -32,7 +32,9 @@ jobs:
             - vendor/bundle
       - run:
           name: Load schema and seed DB
-          command: RAILS_ENV=test bundle exec rake db:schema:load db:seed --trace
+          command: |
+            mysql -h 127.0.0.1 -u abirato abirato_api_test
+            RAILS_ENV=test bundle exec rake db:schema:load db:seed --trace
       - run:
           name: Run rspec
           command: |
