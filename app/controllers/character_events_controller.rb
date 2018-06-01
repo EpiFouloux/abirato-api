@@ -1,2 +1,0 @@
-class CharacterEventsController < ApplicationController
-end

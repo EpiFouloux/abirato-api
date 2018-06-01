@@ -1,2 +1,0 @@
-class TemplateCharactersController < ApplicationController
-end

@@ -1,2 +1,0 @@
-class CharacterNaturesController < ApplicationController
-end
