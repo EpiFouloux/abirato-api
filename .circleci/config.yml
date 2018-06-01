@@ -6,8 +6,6 @@ defaults: &defaults
       - image: circleci/mysql:5.7
         environment:
             - MYSQL_DATABASE=abirato_api_test
-            - MYSQL_USER=abirato
-            - MYSQL_PASSWORD=abirato
 
 version: 2
 
