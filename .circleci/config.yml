@@ -5,6 +5,7 @@ defaults: &defaults
             - RAILS_ENV=test
             - MYSQL_DATABASE=abirato_test
             - MYSQL_USER=abirato
+            - MYSQL_ROOT_PASSWORD=abirato
             - MYSQL_PASSWORD=abirato
       - image: circleci/mysql:5.7
 
