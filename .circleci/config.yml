@@ -5,7 +5,7 @@ defaults: &defaults
             - RAILS_ENV=test
       - image: circleci/mysql:5.7
         environment:
-            - MYSQL_DATABASE=abirato_test
+            - MYSQL_DATABASE=abirato_api_test
             - MYSQL_USER=abirato
             - MYSQL_PASSWORD=abirato
 
@@ -32,7 +32,7 @@ jobs:
             - vendor/bundle
       - run:
           name: Load schema and seed DB
-          command: RAILS_ENV=test bundle exec rake db:schema:load db:seed
+          command: RAILS_ENV=test bundle exec rake db:schema:load db:seed --trace
       - run:
           name: Run rspec
           command: |

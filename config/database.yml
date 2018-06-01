@@ -15,7 +15,7 @@ default: &default
   pool: <%= ENV['RAILS_MAX_THREADS'] || 5 %>
   username: <%= ENV['DATABASE_USER'] || 5 %>
   password: <%= ENV['DATABASE_PASSWORD'] || 5 %>
-  host: 127.0.0.1
+  host: localhost
 
 development:
   <<: *default
