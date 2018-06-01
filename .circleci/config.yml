@@ -7,7 +7,6 @@ defaults: &defaults
         environment:
             - MYSQL_DATABASE=abirato_api_test
             - MYSQL_ALLOW_EMPTY_PASSWORD=yes
-            - MYSQL_ROOT_PASSWORD=abirato
             - MYSQL_ROOT_HOST=%
 
 version: 2
