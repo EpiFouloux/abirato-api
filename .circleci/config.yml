@@ -3,6 +3,9 @@ defaults: &defaults
       - image: circleci/ruby:2.5.1-node-browsers
         environment:
             - RAILS_ENV=test
+            - MYSQL_DATABASE=abirato_test
+            - MYSQL_USER=abirato
+            - MYSQL_PASSWORD=abirato
       - image: circleci/mysql:5.7
 
 version: 2
