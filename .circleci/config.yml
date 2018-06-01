@@ -4,9 +4,6 @@ defaults: &defaults
         environment:
             - RAILS_ENV=test
       - image: circleci/mysql:5.7
-        environment:
-            - POSTGRES_USER: abirato_user
-            - POSTGRES_DB: abirato_test
 
 version: 2
 
