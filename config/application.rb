@@ -23,11 +23,8 @@ module AbiratoApi
     config.load_defaults 5.2
 
     config.autoload_paths << Rails.root.join('lib')
-
-    config.autoload_paths += %W(
-      #{config.root}/app/controllers/concerns
-      #{config.root}/app/models/concerns
-    )
+    config.autoload_paths << Rails.root.join('app/controllers/concerns')
+    config.autoload_paths << Rails.root.join('app/models/concerns')
 
     # Settings in config/environments/* take precedence over those specified here.
     # Application configuration can go into files in config/initializers
