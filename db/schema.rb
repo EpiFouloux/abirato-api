@@ -44,7 +44,7 @@ ActiveRecord::Schema.define(version: 2018_06_01_180020) do
     t.integer "additive_dexterity", limit: 1, default: 0, null: false
     t.integer "additive_intelligence", limit: 1, default: 0, null: false
     t.decimal "grown_strength", precision: 10, default: "0", null: false
-    t.decimal "grown_consitution", precision: 10, default: "0", null: false
+    t.decimal "grown_constitution", precision: 10, default: "0", null: false
     t.decimal "grown_dexterity", precision: 10, default: "0", null: false
     t.decimal "grown_intelligence", precision: 10, default: "0", null: false
     t.bigint "character_nature_id"
@@ -66,7 +66,7 @@ ActiveRecord::Schema.define(version: 2018_06_01_180020) do
     t.integer "control", limit: 1, null: false
     t.integer "swiftness", limit: 1, null: false
     t.integer "strength", limit: 1, null: false
-    t.integer "consitution", limit: 1, null: false
+    t.integer "constitution", limit: 1, null: false
     t.integer "dexterity", limit: 1, null: false
     t.integer "intelligence", limit: 1, null: false
     t.datetime "created_at", null: false

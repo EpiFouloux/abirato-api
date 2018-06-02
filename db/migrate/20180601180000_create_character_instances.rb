@@ -16,7 +16,7 @@ class CreateCharacterInstances < ActiveRecord::Migration[5.2]
       t.integer :additive_intelligence, null:false, default: 0, limit: 1
 
       t.decimal :grown_strength, null: false, default: 0.0
-      t.decimal :grown_consitution, null: false, default: 0.0
+      t.decimal :grown_constitution, null: false, default: 0.0
       t.decimal :grown_dexterity, null: false, default: 0.0
       t.decimal :grown_intelligence, null: false, default: 0.0
 
