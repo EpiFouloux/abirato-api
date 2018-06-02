@@ -1,5 +1,5 @@
 class Character::Nature < ApplicationRecord
-	include Character::BasicStatsValidationConcern
+	include Character::Nature::ValidationConcern
 
 	def modifiers
 		{

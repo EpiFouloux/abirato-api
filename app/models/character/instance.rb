@@ -1,13 +1,64 @@
-class Character::Instance < ApplicationRecord
-	belongs_to :user
-	belongs_to :character_template, class_name: "Template"
-	belongs_to :character_nature, class_name: "Nature"
-	belongs_to :character_class, class_name: "Class"
+class Character::Instance < ApplicationRecord	
+	include Character::Instance::ValidationConcern
 
-	has_many :character_events,
-	  class_name: "Event",
-	  foreign_key: "character_instance_id",
-	  dependent: :destroy
+	# helpers
 
-	validates :name, presence: true
+	def template
+		character_template
+	end
+
+	def nature
+		character_nature
+	end
+
+	# Traits
+
+	def power
+		(nature&.power).to_i + additive_power
+	end
+
+	def control
+		(nature&.control).to_i + additive_control
+	end
+
+	def swiftness
+		(nature&.swiftness).to_i + additive_swiftness
+	end
+
+	# Modifiers
+
+	def constitution
+		(nature&.consitution).to_i + additive_constitution
+	end
+
+	def strength
+		(nature&.strength).to_i + additive_strength
+	end
+
+	def intelligence
+		(nature&.intelligence).to_i + additive_intelligence
+	end
+
+	def dexterity
+		(nature&.dexterity).to_i + additive_dexterity
+	end
+
+	# Global accessors
+
+	def modifiers
+		{
+			constitution: 	constitution,
+			strength: 		strength,
+			dexterity: 		dexterity,
+			intelligence: 	intelligence
+		}
+	end
+
+	def traits
+		{
+			power: 		power,
+			control: 	control,
+			swiftness:	swiftness,
+		}
+	end
 end
