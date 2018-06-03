@@ -9,3 +9,4 @@ class Character::Template < ApplicationRecord
     ]
   end
 end
+

@@ -45,7 +45,7 @@ module Character::Nature::ValidationConcern
   private
 
   def unique_traits
-    count = Character::Nature.where(traits: traits).count
+    count = Character::Nature.where(power: power, control: control, swiftness: swiftness).count
     errors.add(:traits, 'already exist in database') unless count == 0
   end
 
