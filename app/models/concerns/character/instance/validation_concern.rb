@@ -38,8 +38,8 @@ module Character::Instance::ValidationConcern
   end
 
   class_methods do
-    TRAITS_COUNT = 3.freeze
-    MODIFIERS_COUNT = 4.freeze
+    TRAITS_COUNT = Character::Nature::TRAITS_COUNT
+    MODIFIERS_COUNT = Character::Nature::MODIFIERS_COUNT
   end
 
   private

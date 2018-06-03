@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class Character::Nature < ApplicationRecord
   include Character::Nature::ValidationConcern
 

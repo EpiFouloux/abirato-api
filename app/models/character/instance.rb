@@ -3,6 +3,10 @@ class Character::Instance < ApplicationRecord
 
   # helpers
 
+  def current_class
+    character_class
+  end
+
   def template
     character_template
   end
@@ -41,6 +45,15 @@ class Character::Instance < ApplicationRecord
 
   def dexterity
     (nature&.dexterity).to_i + additive_dexterity
+  end
+
+  # Skills
+
+  def skill_ids
+    res = [
+        current_class&.skill_id
+    ]
+    res << template&.skill_ids
   end
 
   # Global accessors

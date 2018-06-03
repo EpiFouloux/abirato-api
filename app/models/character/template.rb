@@ -1,5 +1,11 @@
 class Character::Template < ApplicationRecord
-	belongs_to :character_nature, class_name: "Nature"
+  include Character::Template::ValidationConcern
 
-	validates :name, presence: true
+  def skill_ids
+    [
+      skill_one_id,
+      skill_two_id,
+      skill_three_id
+    ]
+  end
 end

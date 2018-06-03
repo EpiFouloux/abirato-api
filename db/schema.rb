@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2018_06_01_180020) do
+ActiveRecord::Schema.define(version: 2018_06_03_165347) do
 
   create_table "character_classes", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8", force: :cascade do |t|
     t.integer "power", limit: 1, null: false
@@ -20,6 +20,8 @@ ActiveRecord::Schema.define(version: 2018_06_01_180020) do
     t.text "description"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.integer "type", null: false
+    t.integer "skill_id"
   end
 
   create_table "character_events", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8", force: :cascade do |t|
@@ -78,6 +80,12 @@ ActiveRecord::Schema.define(version: 2018_06_01_180020) do
     t.bigint "character_nature_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.integer "icon_id"
+    t.integer "picture_id"
+    t.integer "model_id"
+    t.integer "skill_one_id"
+    t.integer "skill_two_id"
+    t.integer "skill_three_id"
     t.index ["character_nature_id"], name: "index_character_templates_on_character_nature_id"
   end
 
@@ -88,6 +96,8 @@ ActiveRecord::Schema.define(version: 2018_06_01_180020) do
     t.integer "role", default: 0, null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.integer "level", default: 0, null: false
+    t.integer "experience_amount", default: 0, null: false
   end
 
   add_foreign_key "character_events", "character_instances"
