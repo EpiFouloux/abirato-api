@@ -21,6 +21,7 @@ module Character::Nature::ValidationConcern
     # Helpers
     validate :valid_traits_count
     validate :valid_modifiers_count
+    validate :unique_traits
 
     # Complex Verifications
     validate :valid_traits_sum
@@ -42,6 +43,11 @@ module Character::Nature::ValidationConcern
   end
 
   private
+
+  def unique_traits
+    count = Character::Nature.where(traits: traits).count
+    errors.add(:traits, 'already exist in database') unless count == 0
+  end
 
   def valid_traits_count
     errors.add(:traits, "count can not be different than #{TRAITS_COUNT}") unless traits.count == TRAITS_COUNT

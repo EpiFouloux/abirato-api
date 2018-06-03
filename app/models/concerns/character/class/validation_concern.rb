@@ -12,9 +12,9 @@ module Character::Class::ValidationConcern
     validates :type, presence: true, inclusion: { in: CLASS_CATEGORIES }
 
     # no duplicates
-    validates_uniqueness_of :traits
     validates_uniqueness_of :name
 
+    validate :unique_traits
     validate :valid_type
   end
 
@@ -27,6 +27,11 @@ module Character::Class::ValidationConcern
         PRESTIGIOUS,
         LEGENDARY
     ].freeze
+  end
+
+  def unique_traits
+    count = Character::Class.where(traits: traits).count
+    errors.add(:traits, 'already exist in database') unless count == 0
   end
 
   def valid_type
