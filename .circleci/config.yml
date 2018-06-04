@@ -3,10 +3,10 @@ defaults: &defaults
       - image: circleci/ruby:2.5.1-node-browsers
         environment:
             - RAILS_ENV=test
-      - image: circleci/mysql:5.7.22
+      - image: circleci/postgres:9.5-alpine-ram
         environment:
-            - MYSQL_ALLOW_EMPTY_PASSWORD=yes
-            - MYSQL_ROOT_HOST=%
+            - POSTGRES_USER: abirato
+            - POSTGRES_DB: abirato_api_test
 
 version: 2
 
