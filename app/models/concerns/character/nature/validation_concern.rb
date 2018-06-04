@@ -56,7 +56,7 @@ module Character::Nature::ValidationConcern
   def valid_traits_sum
     sum = 0
     traits.each do |key, value|
-      sum += value.to_i # to_i transforms nil to 0
+      sum += value.to_i  unless value.nil?
     end
     errors.add(:traits, "total can not be different than #{TRAITS_SUM}") if sum != TRAITS_SUM
   end
@@ -74,7 +74,7 @@ module Character::Nature::ValidationConcern
   def valid_modifiers_sum
     sum = 0
     modifiers.each do |key, value|
-      sum += value.to_i # to_i transforms nil to 0
+      sum += value.to_i  unless value.nil?
     end
     errors.add(:traits, "total can not be different than #{MODIFIERS_SUM}") if sum != MODIFIERS_SUM
   end

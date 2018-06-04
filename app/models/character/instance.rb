@@ -56,6 +56,13 @@ class Character::Instance < ApplicationRecord
     res << template&.skill_ids
   end
 
+  def skills
+    res = {
+        skill_four: current_class&.skill_id
+    }
+    res.merge!(template.skills)
+  end
+
   # Global accessors
 
   def modifiers
