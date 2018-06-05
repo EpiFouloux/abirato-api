@@ -32,6 +32,8 @@ jobs:
       - run:
           name: Load schema and seed DB
           command: |
+            dockerize -wait tcp://localhost:3306 -timeout 1m
+            nc -z 127.0.0.1 3306
             RAILS_ENV=test bundle exec rails db:create db:schema:load db:seed --trace 
       - run:
           name: Run rspec
