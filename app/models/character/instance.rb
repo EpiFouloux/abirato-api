@@ -4,15 +4,15 @@ class Character::Instance < ApplicationRecord
   # helpers
 
   def current_class
-    character_class
+    classes.last
   end
 
-  def template
-    character_template
-  end
-
-  def nature
-    character_nature
+  def classes
+    [
+      special_class,
+      prestigious_class,
+      legendary_class
+    ].compact
   end
 
   # Traits
@@ -51,14 +51,14 @@ class Character::Instance < ApplicationRecord
 
   def skill_ids
     res = [
-        current_class&.skill_id
+      current_class&.skill_id
     ]
     res << template&.skill_ids
   end
 
   def skills
     res = {
-        skill_four: current_class&.skill_id
+      skill_four: current_class&.skill_id
     }
     res.merge!(template.skills)
   end
@@ -68,16 +68,16 @@ class Character::Instance < ApplicationRecord
   def modifiers
     {
       constitution:   constitution,
-      strength:     strength,
-      dexterity:     dexterity,
+      strength:       strength,
+      dexterity:      dexterity,
       intelligence:   intelligence
     }
   end
 
   def traits
     {
-      power:     power,
-      control:   control,
+      power:      power,
+      control:    control,
       swiftness:  swiftness,
     }
   end
