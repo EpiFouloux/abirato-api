@@ -9,6 +9,7 @@ RSpec.describe Character::Template, type: :model do
   describe 'factories' do
     context 'a correct factory' do
       it 'should be valid' do
+        byebug
         expect { create(:character_template) }.not_to raise_error
       end
     end

@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 
 class Character::Class < ApplicationRecord
+  include Character::TraitsConcern
   include Character::Class::ValidationConcern
 
   def traits

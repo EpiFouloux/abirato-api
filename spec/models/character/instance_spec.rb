@@ -49,5 +49,32 @@ RSpec.describe Character::Instance, type: :model do
         expect(instance.classes.last).to eq(instance.prestigious_class)
       end
     end
+
+    context '#modifiers' do
+      let!(:instance) { create(:character_instance) }
+
+      it 'should return the nature modifiers for a basic character' do
+        modifiers = instance.modifiers
+
+        expect(modifiers.keys.count).to eq(4)
+        expect(modifiers[:constitution]).to eq(instance.nature.constitution)
+        expect(modifiers[:intelligence]).to eq(instance.nature.intelligence)
+        expect(modifiers[:dexterity]).to eq(instance.nature.dexterity)
+        expect(modifiers[:strength]).to eq(instance.nature.strength)
+      end
+    end
+
+    context '#traits' do
+      let!(:instance) { create(:character_instance) }
+
+      it 'should return the nature traits for a basic character' do
+        traits = instance.traits
+
+        expect(traits.keys.count).to eq(3)
+        expect(traits[:power]).to eq(instance.nature.power)
+        expect(traits[:swiftness]).to eq(instance.nature.swiftness)
+        expect(traits[:control]).to eq(instance.nature.control)
+      end
+    end
   end
 end

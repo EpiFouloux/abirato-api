@@ -32,25 +32,10 @@ module Character::Instance::ValidationConcern
     validates :grown_constitution, presence: true
     validates :grown_dexterity, presence: true
     validates :grown_intelligence, presence: true
-
-    # Relation helpers
-
-    validate :valid_traits_count
-    validate :valid_modifiers_count
   end
 
   class_methods do
     TRAITS_COUNT = Character::Nature::TRAITS_COUNT
     MODIFIERS_COUNT = Character::Nature::MODIFIERS_COUNT
-  end
-
-  private
-
-  def valid_traits_count
-    errors.add(:traits, "count can not be different than #{TRAITS_COUNT}") unless traits.count == TRAITS_COUNT
-  end
-
-  def valid_modifiers_count
-    errors.add(:modifiers, "count can not be different than #{MODIFIERS_COUNT}") unless modifiers.count == MODIFIERS_COUNT
   end
 end

@@ -1,4 +1,7 @@
 class Character::Instance < ApplicationRecord
+
+  include Character::TraitsConcern
+  included Character::ModifiersConcern
   include Character::Instance::ValidationConcern
 
   # helpers
@@ -37,18 +40,18 @@ class Character::Instance < ApplicationRecord
 
   def modifiers
     {
-        constitution:   constitution,
-        strength:       strength,
-        dexterity:      dexterity,
-        intelligence:   intelligence
+      constitution:   constitution,
+      strength:       strength,
+      dexterity:      dexterity,
+      intelligence:   intelligence
     }
   end
 
   def traits
     {
-        power:      power,
-        control:    control,
-        swiftness:  swiftness,
+      power:      power,
+      control:    control,
+      swiftness:  swiftness,
     }
   end
 
