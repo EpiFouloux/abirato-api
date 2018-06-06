@@ -32,7 +32,7 @@ class Character::Instance < ApplicationRecord
   # Modifiers
 
   def constitution
-    (nature&.consitution).to_i + additive_constitution
+    (nature&.constitution).to_i + additive_constitution
   end
 
   def strength

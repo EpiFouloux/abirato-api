@@ -1,18 +1,6 @@
 require 'rails_helper'
 
 RSpec.describe Character::Nature, type: :model do
-  describe 'factories' do
-    it 'default factory should be valid' do
-      expect { create(:character_nature) }.not_to raise_error
-    end
-
-    it 'wrong values should fail' do
-      expect { create(:character_nature, power: 10) }.to raise_error(
-        ActiveRecord::RecordInvalid,
-        /Validation failed: Traits total can not be different than 3, Power can not be inferior to 0 or greater than 2/
-      )
-    end
-  end
 
   describe 'default validations' do
     it { is_expected.to validate_presence_of(:name) }
@@ -28,7 +16,7 @@ RSpec.describe Character::Nature, type: :model do
   end
 
   describe 'Traits validations' do
-    let(:nature) { create(:character_nature) }
+    let(:nature) { Character::Nature.all.sample }
 
     after(:each) do
       expect { nature.save! }.to raise_error(ActiveRecord::RecordInvalid)
@@ -50,4 +38,5 @@ RSpec.describe Character::Nature, type: :model do
       nature.power = nil
     end
   end
+
 end
