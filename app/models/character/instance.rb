@@ -15,6 +15,43 @@ class Character::Instance < ApplicationRecord
     ].compact
   end
 
+  # Skills
+
+  def skill_ids
+    res = []
+    classes.each do |c|
+      res << c.skill_id
+    end
+    res << template&.skill_ids
+  end
+
+  def skills
+    res = {}
+    res.merge!(template.skills)
+    res[:skill_four] = special_class.skill_id
+    res[:skill_five] = prestigious_class&.skill_id
+    res[:skill_six] = legendary_class&.skill_id
+  end
+
+  # Global accessors
+
+  def modifiers
+    {
+        constitution:   constitution,
+        strength:       strength,
+        dexterity:      dexterity,
+        intelligence:   intelligence
+    }
+  end
+
+  def traits
+    {
+        power:      power,
+        control:    control,
+        swiftness:  swiftness,
+    }
+  end
+
   # Traits
 
   def power
@@ -45,40 +82,5 @@ class Character::Instance < ApplicationRecord
 
   def dexterity
     (nature&.dexterity).to_i + additive_dexterity
-  end
-
-  # Skills
-
-  def skill_ids
-    res = [
-      current_class&.skill_id
-    ]
-    res << template&.skill_ids
-  end
-
-  def skills
-    res = {
-      skill_four: current_class&.skill_id
-    }
-    res.merge!(template.skills)
-  end
-
-  # Global accessors
-
-  def modifiers
-    {
-      constitution:   constitution,
-      strength:       strength,
-      dexterity:      dexterity,
-      intelligence:   intelligence
-    }
-  end
-
-  def traits
-    {
-      power:      power,
-      control:    control,
-      swiftness:  swiftness,
-    }
   end
 end

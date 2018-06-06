@@ -12,7 +12,7 @@ RSpec.describe Character::Class, type: :model do
   describe 'factories' do
     context 'a correct factory' do
       it 'should be valid' do
-        expect { create(:character_class) }.not_to raise_error
+        expect { create(:special_class) }.not_to raise_error
       end
     end
 
@@ -20,7 +20,7 @@ RSpec.describe Character::Class, type: :model do
       it 'should raise_error with negative amount' do
         expect {
           create(
-            :character_class,
+            :special_class,
             power:      0,
             swiftness:  -10,
             control:    0
@@ -30,7 +30,7 @@ RSpec.describe Character::Class, type: :model do
       it 'should raise_error with too big amount' do
         expect {
           create(
-            :character_class,
+            :special_class,
             power:      0,
             swiftness:  10,
             control:    100
@@ -43,7 +43,7 @@ RSpec.describe Character::Class, type: :model do
       it 'should raise_error' do
         expect {
           create(
-            :character_class,
+            :special_class,
             power:      1,
             swiftness:  2,
             control:    3,
@@ -54,12 +54,12 @@ RSpec.describe Character::Class, type: :model do
     end
 
     context 'when the class is not unique' do
-      let!(:class1) { create(:character_class, name: 'foobar', skill_id: 0) }
+      let!(:class1) { create(:special_class, name: 'foobar', skill_id: 0) }
 
       it 'should raise_error with same name' do
         expect {
           create(
-            :character_class,
+            :special_class,
             name: class1.name,
             skill_id: 1
           )
@@ -68,7 +68,7 @@ RSpec.describe Character::Class, type: :model do
       it 'should raise_error with same skill' do
         expect {
           create(
-            :character_class,
+            :special_class,
             name: 'hello',
             skill_id: class1.skill_id
           )
@@ -77,7 +77,7 @@ RSpec.describe Character::Class, type: :model do
       it 'should raise_error with same traits' do
         expect {
           create(
-            :character_class,
+            :special_class,
             name: 'hello',
             power: class1.power,
             control: class1.control,
