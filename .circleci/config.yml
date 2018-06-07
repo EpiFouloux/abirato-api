@@ -1,6 +1,6 @@
 defaults: &defaults
   docker:
-      - image: circleci/ruby:2.5.1-node-browsers
+      - image: circleci/ruby:2.5.0
         environment:
             - RAILS_ENV=test
       - image: circleci/mysql:5.7.22
@@ -32,6 +32,8 @@ jobs:
       - run:
           name: Load schema and seed DB
           command: |
+            dockerize -wait tcp://localhost:3306 -timeout 1m
+            nc -z 127.0.0.1 3306
             RAILS_ENV=test bundle exec rails db:create db:schema:load db:seed --trace 
       - run:
           name: Run rspec

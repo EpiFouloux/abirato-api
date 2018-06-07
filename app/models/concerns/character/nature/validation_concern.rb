@@ -21,6 +21,7 @@ module Character::Nature::ValidationConcern
     # Helpers
     validate :valid_traits_count
     validate :valid_modifiers_count
+    validate :unique_traits
 
     # Complex Verifications
     validate :valid_traits_sum
@@ -43,6 +44,11 @@ module Character::Nature::ValidationConcern
 
   private
 
+  def unique_traits
+    count = Character::Nature.where(power: power, control: control, swiftness: swiftness).count
+    errors.add(:traits, 'already exist in database') unless count == 0
+  end
+
   def valid_traits_count
     errors.add(:traits, "count can not be different than #{TRAITS_COUNT}") unless traits.count == TRAITS_COUNT
   end
@@ -50,7 +56,7 @@ module Character::Nature::ValidationConcern
   def valid_traits_sum
     sum = 0
     traits.each do |key, value|
-      sum += value.to_i # to_i transforms nil to 0
+      sum += value.to_i  unless value.nil?
     end
     errors.add(:traits, "total can not be different than #{TRAITS_SUM}") if sum != TRAITS_SUM
   end
@@ -68,7 +74,7 @@ module Character::Nature::ValidationConcern
   def valid_modifiers_sum
     sum = 0
     modifiers.each do |key, value|
-      sum += value.to_i # to_i transforms nil to 0
+      sum += value.to_i  unless value.nil?
     end
     errors.add(:traits, "total can not be different than #{MODIFIERS_SUM}") if sum != MODIFIERS_SUM
   end
