@@ -15,6 +15,7 @@ module Character::Class::ValidationConcern
     validates_uniqueness_of :name
     validates_uniqueness_of :skill_id
 
+    # validation helpers
     validate :unique_traits
     validate :valid_type
   end

@@ -1,4 +1,4 @@
-module Character::ModifiersConcern
+module Character::Modifiers
   extend ActiveSupport::Concern
 
   included do

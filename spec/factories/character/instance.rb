@@ -5,6 +5,7 @@ FactoryBot.define do
     nature            { template.nature }
     name              { Faker::Lorem.characters(5) }
     level             { 1 }
+    additive_power    { 1 }
     special_class     { create(:special_class)}
   end
 end

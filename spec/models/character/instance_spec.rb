@@ -65,13 +65,17 @@ RSpec.describe Character::Instance, type: :model do
     end
 
     context '#traits' do
-      let!(:instance) { create(:character_instance) }
+      let!(:instance) { create(
+          :character_instance,
+          additive_power: 1,
+          additive_control: 0,
+          additive_swiftness: 0) }
 
-      it 'should return the nature traits for a basic character' do
+      it 'should return the nature traits plus one for a basic character' do
         traits = instance.traits
 
         expect(traits.keys.count).to eq(3)
-        expect(traits[:power]).to eq(instance.nature.power)
+        expect(traits[:power]).to eq(instance.nature.power + 1)
         expect(traits[:swiftness]).to eq(instance.nature.swiftness)
         expect(traits[:control]).to eq(instance.nature.control)
       end

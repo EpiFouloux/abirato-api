@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-module Character::TraitsConcern
+module Character::Traits
   extend ActiveSupport::Concern
 
   included do

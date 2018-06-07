@@ -1,7 +1,7 @@
 class Character::Instance < ApplicationRecord
 
-  include Character::TraitsConcern
-  included Character::ModifiersConcern
+  include Character::Traits
+  included Character::Modifiers
   include Character::Instance::ValidationConcern
 
   # helpers

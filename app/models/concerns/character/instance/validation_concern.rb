@@ -19,7 +19,7 @@ module Character::Instance::ValidationConcern
     validates :level, presence: true, inclusion: 1..29
     validates :experience_amount, presence: true
 
-    # Self caracterstics
+    # Self characteristics
 
     validates :additive_power, presence: true
     validates :additive_swiftness, presence: true
@@ -32,10 +32,19 @@ module Character::Instance::ValidationConcern
     validates :grown_constitution, presence: true
     validates :grown_dexterity, presence: true
     validates :grown_intelligence, presence: true
+
+    # validation helpers
+
+    # Class category
+    validate do
+      expected_category = class_category
+      errors.add(:traits, "do not match any class category") if expected_category.nil?
+      errors.add(:traits, "do not match the associated current class") if current_class&.class_category != expected_category
+    end
   end
 
   class_methods do
-    TRAITS_COUNT = Character::Nature::TRAITS_COUNT
-    MODIFIERS_COUNT = Character::Nature::MODIFIERS_COUNT
+    TRAITS_COUNT = Character::Nature::TRAITS_COUNT.freeze
+    MODIFIERS_COUNT = Character::Nature::MODIFIERS_COUNT.freeze
   end
 end
