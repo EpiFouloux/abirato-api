@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2018_06_03_165347) do
+ActiveRecord::Schema.define(version: 2018_06_09_212054) do
 
   create_table "character_classes", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8", force: :cascade do |t|
     t.integer "power", limit: 1, null: false
@@ -50,13 +50,17 @@ ActiveRecord::Schema.define(version: 2018_06_03_165347) do
     t.decimal "grown_dexterity", precision: 10, default: "0", null: false
     t.decimal "grown_intelligence", precision: 10, default: "0", null: false
     t.bigint "character_nature_id"
-    t.bigint "character_class_id"
+    t.bigint "character_special_class_id"
     t.bigint "character_template_id"
     t.bigint "user_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.index ["character_class_id"], name: "index_character_instances_on_character_class_id"
+    t.bigint "character_prestigious_class_id"
+    t.bigint "character_legendary_class_id"
+    t.index ["character_legendary_class_id"], name: "index_character_instances_on_character_legendary_class_id"
     t.index ["character_nature_id"], name: "index_character_instances_on_character_nature_id"
+    t.index ["character_prestigious_class_id"], name: "index_character_instances_on_character_prestigious_class_id"
+    t.index ["character_special_class_id"], name: "index_character_instances_on_character_special_class_id"
     t.index ["character_template_id"], name: "index_character_instances_on_character_template_id"
     t.index ["user_id"], name: "index_character_instances_on_user_id"
   end
@@ -86,6 +90,8 @@ ActiveRecord::Schema.define(version: 2018_06_03_165347) do
     t.integer "skill_one_id"
     t.integer "skill_two_id"
     t.integer "skill_three_id"
+    t.text "description"
+    t.boolean "enabled", default: true
     t.index ["character_nature_id"], name: "index_character_templates_on_character_nature_id"
   end
 
@@ -101,7 +107,9 @@ ActiveRecord::Schema.define(version: 2018_06_03_165347) do
   end
 
   add_foreign_key "character_events", "character_instances"
-  add_foreign_key "character_instances", "character_classes"
+  add_foreign_key "character_instances", "character_classes", column: "character_legendary_class_id"
+  add_foreign_key "character_instances", "character_classes", column: "character_prestigious_class_id"
+  add_foreign_key "character_instances", "character_classes", column: "character_special_class_id"
   add_foreign_key "character_instances", "character_natures"
   add_foreign_key "character_instances", "character_templates"
   add_foreign_key "character_instances", "users"

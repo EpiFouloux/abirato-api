@@ -1,18 +1,77 @@
 class Character::Instance < ApplicationRecord
+  include Character::Traits
+  included Character::Modifiers
   include Character::Instance::ValidationConcern
+
+  before_validation :handle_traits
+
+  def handle_traits
+    target_class = Character::Class.find_by_traits(traits)
+    return if target_class.nil?
+    if current_class.nil?
+      self.special_class = target_class
+      return
+    end
+    return if target_class == current_class
+    case current_class.class_type
+    when Character::Class::SPECIAL
+      self.prestigious_class = target_class
+    when Character::Class::PRESTIGIOUS
+      self.legendary_class = target_class
+    else
+      raise ActiveRecord::RecordInvalid, "The class category is invalid"
+    end
+  end
 
   # helpers
 
   def current_class
-    character_class
+    classes.last
   end
 
-  def template
-    character_template
+  def classes
+    [
+      special_class,
+      prestigious_class,
+      legendary_class
+    ].compact
   end
 
-  def nature
-    character_nature
+  # Skills
+
+  def skill_ids
+    res = []
+    classes.each do |c|
+      res << c.skill_id
+    end
+    res << template&.skill_ids
+  end
+
+  def skills
+    res = {}
+    res.merge!(template.skills)
+    res[:skill_four] = special_class.skill_id
+    res[:skill_five] = prestigious_class&.skill_id
+    res[:skill_six] = legendary_class&.skill_id
+  end
+
+  # Global accessors
+
+  def modifiers
+    {
+      constitution:   constitution,
+      strength:       strength,
+      dexterity:      dexterity,
+      intelligence:   intelligence
+    }
+  end
+
+  def traits
+    {
+      power:      power,
+      control:    control,
+      swiftness:  swiftness,
+    }
   end
 
   # Traits
@@ -32,7 +91,7 @@ class Character::Instance < ApplicationRecord
   # Modifiers
 
   def constitution
-    (nature&.consitution).to_i + additive_constitution
+    (nature&.constitution).to_i + additive_constitution
   end
 
   def strength
@@ -45,40 +104,5 @@ class Character::Instance < ApplicationRecord
 
   def dexterity
     (nature&.dexterity).to_i + additive_dexterity
-  end
-
-  # Skills
-
-  def skill_ids
-    res = [
-        current_class&.skill_id
-    ]
-    res << template&.skill_ids
-  end
-
-  def skills
-    res = {
-        skill_four: current_class&.skill_id
-    }
-    res.merge!(template.skills)
-  end
-
-  # Global accessors
-
-  def modifiers
-    {
-      constitution:   constitution,
-      strength:     strength,
-      dexterity:     dexterity,
-      intelligence:   intelligence
-    }
-  end
-
-  def traits
-    {
-      power:     power,
-      control:   control,
-      swiftness:  swiftness,
-    }
   end
 end
