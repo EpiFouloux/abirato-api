@@ -11,9 +11,9 @@ class Character::Template < ApplicationRecord
 
   def skills
     {
-        skill_one:    skill_one_id,
-        skill_two:    skill_two_id,
-        skill_three:  skill_three_id,
+      skill_one:    skill_one_id,
+      skill_two:    skill_two_id,
+      skill_three:  skill_three_id
     }
   end
 end

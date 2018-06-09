@@ -29,7 +29,7 @@ RSpec.describe Character::Instance, type: :model do
       end
 
       it 'should return the prestigious class for a leveled character' do
-        instance.prestigious_class = create(:prestigious_class, power: instance.power, control: instance.control, swiftness: instance.swiftness + 1)
+        instance.prestigious_class = Character::Class.where(power: instance.power, control: instance.control, swiftness: instance.swiftness + 1).first
         instance.additive_swiftness = 1
         instance.save!
         expect(instance.current_class).to eq(instance.prestigious_class)
@@ -43,7 +43,7 @@ RSpec.describe Character::Instance, type: :model do
       end
 
       it 'should return two classes for a leveled character' do
-        instance.prestigious_class = create(:prestigious_class, power: instance.power, control: instance.control, swiftness: instance.swiftness + 1)
+        instance.prestigious_class = Character::Class.where(power: instance.power, control: instance.control, swiftness: instance.swiftness + 1).first
         instance.additive_swiftness = 1
         instance.save!
         expect(instance.classes.count).to eq(2)
@@ -67,11 +67,14 @@ RSpec.describe Character::Instance, type: :model do
     end
 
     context '#traits' do
-      let!(:instance) { create(
+      let!(:instance) { 
+        create(
           :character_instance,
           additive_power: 1,
           additive_control: 0,
-          additive_swiftness: 0) }
+          additive_swiftness: 0
+        )
+      }
 
       it 'should return the nature traits plus one for a basic character' do
         traits = instance.traits

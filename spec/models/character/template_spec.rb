@@ -3,6 +3,9 @@ require 'rails_helper'
 RSpec.describe Character::Template, type: :model do
   describe 'basic validations' do
     it { is_expected.to validate_presence_of(:name) }
+    it { is_expected.to validate_presence_of(:skill_one_id) }
+    it { is_expected.to validate_presence_of(:skill_two_id) }
+    it { is_expected.to validate_presence_of(:skill_three_id) }
     it { is_expected.to belong_to(:nature) }
   end
 
@@ -63,7 +66,7 @@ RSpec.describe Character::Template, type: :model do
             name: 'bar',
             skill_one_id: template.skill_one_id
           )
-        } .to raise_error(ActiveRecord::RecordInvalid, /Skill one has already been taken/)
+        } .to raise_error(ActiveRecord::RecordInvalid, /Skill one is not unique/)
       end
     end
   end
