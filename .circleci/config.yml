@@ -1,6 +1,6 @@
 defaults: &defaults
   docker:
-      - image: circleci/ruby:2.5.1-node-browsers
+      - image: circleci/ruby:2.5.0
         environment:
             - RAILS_ENV=test
       - image: circleci/mysql:5.7.22
