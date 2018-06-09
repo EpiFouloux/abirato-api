@@ -1,3 +1,5 @@
+require 'rails_helper'
+
 RSpec.describe 'User API', type: :request do
   let!(:users) { create_list(:user, 5) }
   let(:user_id) { users.last.id }

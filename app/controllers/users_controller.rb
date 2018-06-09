@@ -2,7 +2,7 @@ class UsersController < ApplicationController
 
   # GET /users
   def index
-
+    json_response(User.all)
   end
 
   # GET /users/:id

@@ -11,4 +11,14 @@ class Character::Class < ApplicationRecord
       swiftness:  swiftness
     }
   end
+
+  class << self
+    def find_by_traits(traits)
+      Character::Class.where(
+        power:      traits[:power],
+        control:    traits[:control],
+        swiftness:  traits[:swiftness]
+      ).first
+    end
+  end
 end

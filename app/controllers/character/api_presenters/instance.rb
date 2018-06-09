@@ -1,7 +1,6 @@
 # frozen_string_literal: true
-module ApiPresenter
-
-  class Character::Instance
+module Character::ApiPresenter
+  class Instance
     class << self
       def format(instance)
         return {} if instance.nil?
@@ -18,9 +17,10 @@ module ApiPresenter
         instance.classes.each do |c|
           res[:classes] << {
             name: c.name,
-            category: c.type
+            category: c.class_type
           }
         end
+        res
       end
     end
   end

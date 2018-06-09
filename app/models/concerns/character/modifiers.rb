@@ -15,6 +15,18 @@ module Character::Modifiers
     MODIFIERS_COUNT = 4
     MODIFIERS_MINIMUM_SUM = 5
     MODIFIERS_MAXIMUM_SUM = 40 # fill with correct value
+
+    STRENGTH = 'strength'.freeze
+    CONSTITUTION = 'constitution'.freeze
+    DEXTERITY = 'dexterity'.freeze
+    INTELLIGENCE = 'intelligence'.freeze
+
+    MODIFIERS_NAMES = [
+      STRENGTH,
+      CONSTITUTION,
+      DEXTERITY,
+      INTELLIGENCE
+    ].freeze
   end
 
   # Helpers

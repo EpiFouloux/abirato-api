@@ -1,8 +1,27 @@
 class Character::Instance < ApplicationRecord
-
   include Character::Traits
   included Character::Modifiers
   include Character::Instance::ValidationConcern
+
+  before_validation :handle_traits
+
+  def handle_traits
+    target_class = Character::Class.find_by_traits(traits)
+    return if target_class.nil?
+    if current_class.nil?
+      self.special_class = target_class
+      return
+    end
+    return if target_class == current_class
+    case current_class.class_type
+    when Character::Class::SPECIAL
+      self.prestigious_class = target_class
+    when Character::Class::PRESTIGIOUS
+      self.legendary_class = target_class
+    else
+      raise ActiveRecord::RecordInvalid, "The class category is invalid"
+    end
+  end
 
   # helpers
 

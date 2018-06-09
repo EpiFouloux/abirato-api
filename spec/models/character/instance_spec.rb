@@ -29,8 +29,9 @@ RSpec.describe Character::Instance, type: :model do
       end
 
       it 'should return the prestigious class for a leveled character' do
-        instance.prestigious_class = create(:prestigious_class)
-        instance.save!(validate: false)
+        instance.prestigious_class = create(:prestigious_class, power: instance.power, control: instance.control, swiftness: instance.swiftness + 1)
+        instance.additive_swiftness = 1
+        instance.save!
         expect(instance.current_class).to eq(instance.prestigious_class)
       end
     end
@@ -42,8 +43,9 @@ RSpec.describe Character::Instance, type: :model do
       end
 
       it 'should return two classes for a leveled character' do
-        instance.prestigious_class = create(:prestigious_class)
-        instance.save!(validate: false)
+        instance.prestigious_class = create(:prestigious_class, power: instance.power, control: instance.control, swiftness: instance.swiftness + 1)
+        instance.additive_swiftness = 1
+        instance.save!
         expect(instance.classes.count).to eq(2)
         expect(instance.classes.first).to eq(instance.special_class)
         expect(instance.classes.last).to eq(instance.prestigious_class)

@@ -18,6 +18,16 @@ module Character::Traits
     TRAITS_COUNT = 3
     TRAITS_MINIMUM_SUM = 3
     TRAITS_MAXIMUM_SUM = 6
+
+    POWER = 'power'
+    CONTROL = 'control'
+    SWIFTNESS = 'swiftness'
+
+    TRAITS_NAMES = [
+      POWER,
+      CONTROL,
+      SWIFTNESS
+    ].freeze
   end
 
   # helpers
