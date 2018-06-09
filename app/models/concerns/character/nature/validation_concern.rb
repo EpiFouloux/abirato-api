@@ -19,8 +19,6 @@ module Character::Nature::ValidationConcern
     validates :intelligence, presence: true
 
     # Helpers
-    validate :valid_traits_count
-    validate :valid_modifiers_count
     validate :unique_traits
 
     # Complex Verifications
@@ -34,11 +32,7 @@ module Character::Nature::ValidationConcern
   end
 
   class_methods do
-    TRAITS_COUNT = 3
-    TRAITS_SUM = 3
     MAX_TRAITS_VALUE = 2
-    MODIFIERS_COUNT = 4
-    MODIFIERS_SUM = 5
     MAX_MODIFIERS_VALUE = 3
   end
 
@@ -49,16 +43,9 @@ module Character::Nature::ValidationConcern
     errors.add(:traits, 'already exist in database') unless count == 0
   end
 
-  def valid_traits_count
-    errors.add(:traits, "count can not be different than #{TRAITS_COUNT}") unless traits.count == TRAITS_COUNT
-  end
-
   def valid_traits_sum
-    sum = 0
-    traits.each do |key, value|
-      sum += value.to_i  unless value.nil?
-    end
-    errors.add(:traits, "total can not be different than #{TRAITS_SUM}") if sum != TRAITS_SUM
+    sum = traits_sum
+    errors.add(:traits, "total can not be different than #{Character::Nature::TRAITS_MINIMUM_SUM}") if sum != Character::Nature::TRAITS_MINIMUM_SUM
   end
 
   def valid_traits_value
@@ -67,16 +54,9 @@ module Character::Nature::ValidationConcern
     end
   end
 
-  def valid_modifiers_count
-    errors.add(:modifiers, "count can not be different than #{MODIFIERS_COUNT}") unless modifiers.count == MODIFIERS_COUNT
-  end
-
   def valid_modifiers_sum
-    sum = 0
-    modifiers.each do |key, value|
-      sum += value.to_i  unless value.nil?
-    end
-    errors.add(:traits, "total can not be different than #{MODIFIERS_SUM}") if sum != MODIFIERS_SUM
+    sum = modifiers_sum
+    errors.add(:traits, "total can not be different than #{Character::Nature::MODIFIERS_MINIMUM_SUM}") if sum != Character::Nature::MODIFIERS_MINIMUM_SUM
   end
 
   def valid_modifiers_value

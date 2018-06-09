@@ -1,6 +1,8 @@
 # frozen_string_literal: true
 
 class Character::Nature < ApplicationRecord
+  include Character::Traits
+  include Character::Modifiers
   include Character::Nature::ValidationConcern
 
   def modifiers

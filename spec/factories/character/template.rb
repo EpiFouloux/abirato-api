@@ -1,7 +1,7 @@
 FactoryBot.define do
   factory :character_template, class: Character::Template do
     name              { Faker::Lorem.word }
-    character_nature  { create(:character_nature) }
+    nature            { Character::Nature.all.sample }
     picture_id        { 0 }
     icon_id           { Faker::Number.number(1) }
     skill_one_id      { Faker::Number.number(2) }

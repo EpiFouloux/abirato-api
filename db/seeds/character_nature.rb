@@ -1,5 +1,4 @@
-
-Character::Nature.create(
+Character::Nature.create!(
   name: 'Binder',
   power: 2,
   control: 0,
@@ -9,7 +8,7 @@ Character::Nature.create(
   dexterity: 1,
   intelligence: 0
 )
-Character::Nature.create(
+Character::Nature.create!(
   name: 'Bender',
   power: 1,
   control: 2,
@@ -19,7 +18,7 @@ Character::Nature.create(
   dexterity: 0,
   intelligence: 3
 )
-Character::Nature.create(
+Character::Nature.create!(
   name: 'Mecha',
   power: 1,
   control: 1,

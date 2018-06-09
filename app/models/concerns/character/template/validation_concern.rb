@@ -4,7 +4,7 @@ module Character::Template::ValidationConcern
   extend ActiveSupport::Concern
 
   included do
-    belongs_to :character_nature, class_name: 'Nature'
+    belongs_to :nature, class_name: 'Nature', foreign_key: 'character_nature_id'
 
     validates :name, presence: true
     validates_uniqueness_of :name
