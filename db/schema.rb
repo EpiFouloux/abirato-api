@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2018_06_05_174603) do
+ActiveRecord::Schema.define(version: 2018_06_09_212054) do
 
   create_table "character_classes", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8", force: :cascade do |t|
     t.integer "power", limit: 1, null: false
@@ -90,6 +90,8 @@ ActiveRecord::Schema.define(version: 2018_06_05_174603) do
     t.integer "skill_one_id"
     t.integer "skill_two_id"
     t.integer "skill_three_id"
+    t.text "description"
+    t.boolean "enabled", default: true
     t.index ["character_nature_id"], name: "index_character_templates_on_character_nature_id"
   end
 

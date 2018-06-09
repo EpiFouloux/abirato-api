@@ -5,7 +5,7 @@ RSpec.describe 'Character Instance API', type: :request do
   let(:user_id) { user.id }
 
   context 'With existing character instances' do
-    let(:template) { create(:character_template) }
+    let(:template) { Character::Template.all.sample }
     let!(:instances) {
       create_list(
         :character_instance,
@@ -79,15 +79,7 @@ RSpec.describe 'Character Instance API', type: :request do
   end
 
   describe 'POST /users/:id/characters' do
-    let(:template) { create(:character_template) }
-    let(:sclass) {
-      create(
-        :special_class,
-        power: template.nature.power + 1,
-        control: template.nature.control,
-        swiftness: template.nature.swiftness
-      )
-    }
+    let(:template) { Character::Template.all.sample }
     let(:valid_attributes) {
       {
         template_id: template.id,
@@ -99,7 +91,6 @@ RSpec.describe 'Character Instance API', type: :request do
     context 'when the request is valid' do
       before(:each) do
         expect(Character::Instance.count).to eq(0)
-        sclass
         post "/users/#{user_id}/characters", params: valid_attributes
       end
 
@@ -167,19 +158,10 @@ RSpec.describe 'Character Instance API', type: :request do
       }
     }
     let(:instance) { create(:character_instance, additive_power: 0, additive_control: 0, additive_swiftness: 1) }
-    let(:sclass) {
-      create(
-          :prestigious_class,
-          power: instance.power,
-          control: instance.control + 1,
-          swiftness: instance.swiftness
-      )
-    }
     let(:instance_id) { instance.id }
 
     context 'when the record exists' do
       before(:each) do
-        sclass
         put "/users/#{user_id}/characters/#{instance_id}", params: valid_attributes
       end
 

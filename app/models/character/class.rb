@@ -20,5 +20,17 @@ class Character::Class < ApplicationRecord
         swiftness:  traits[:swiftness]
       ).first
     end
+
+    def special_classes
+      Character::Class.where(class_type: 0)
+    end
+
+    def prestigious_classes
+      Character::Class.where(class_type: 1)
+    end
+
+    def legendary_classes
+      Character::Class.where(class_type: 2)
+    end
   end
 end
