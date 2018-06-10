@@ -1,4 +1,5 @@
 Character::Class.create!(
+  id:           0,
   name:         'Fighter',
   power:        3,
   control:      0,
@@ -7,6 +8,7 @@ Character::Class.create!(
   skill_id:     0
 )
 Character::Class.create!(
+  id:           1,
   name:         'Wanderer',
   power:        2,
   control:      0,
@@ -15,6 +17,7 @@ Character::Class.create!(
   skill_id:     1
 )
 Character::Class.create!(
+  id:           2,
   name:         'Adept',
   power:        2,
   control:      1,
@@ -23,6 +26,7 @@ Character::Class.create!(
   skill_id:     2
 )
 Character::Class.create!(
+  id:           3,
   name:         'Trickster',
   power:        1,
   control:      1,
@@ -31,6 +35,7 @@ Character::Class.create!(
   skill_id:     3
 )
 Character::Class.create!(
+  id:           4,
   name:         'Stalker',
   power:        1,
   control:      2,
@@ -39,6 +44,7 @@ Character::Class.create!(
   skill_id:     4
 )
 Character::Class.create!(
+  id:           5,
   name:         'Mage',
   power:        1,
   control:      3,
@@ -47,6 +53,7 @@ Character::Class.create!(
   skill_id:     5
 )
 Character::Class.create!(
+  id:           6,
   name:         'Sorcerer',
   power:        2,
   control:      2,

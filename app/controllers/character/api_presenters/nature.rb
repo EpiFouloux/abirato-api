@@ -5,6 +5,7 @@ module Character::ApiPresenter
       def format(nature)
         return {} if nature.nil?
         res = {
+          id:   nature.id,
           name: nature.name
         }
         res[:traits] = nature.traits
