@@ -4,4 +4,6 @@ Rails.application.routes.draw do
   resources :users do
     resources :characters, controller: 'character/instances'
   end
+
+  resources :natures, controller: 'character/natures', only: [:index, :show]
 end
