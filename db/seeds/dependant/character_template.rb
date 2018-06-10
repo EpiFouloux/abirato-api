@@ -1,4 +1,5 @@
 Character::Template.create!(
+  id:             0,
   name:           'Ada',
   description:    '',
   nature:         Character::Nature.find_by(name: 'Mecha'),
@@ -9,6 +10,7 @@ Character::Template.create!(
   skill_three_id: 3
 )
 Character::Template.create!(
+  id:             1,
   name:           'Nicholas',
   description:    '',
   nature:         Character::Nature.find_by(name: 'Binder'),
@@ -19,6 +21,7 @@ Character::Template.create!(
   skill_three_id: 6
 )
 Character::Template.create!(
+  id:             2,
   name:           'Anaya',
   description:    '',
   nature:         Character::Nature.find_by(name: 'Bender'),

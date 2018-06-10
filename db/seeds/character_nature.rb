@@ -1,4 +1,5 @@
 Character::Nature.create!(
+  id:             0,
   name:           'Binder',
   power:          2,
   control:        0,
@@ -9,6 +10,7 @@ Character::Nature.create!(
   intelligence:   0
 )
 Character::Nature.create!(
+  id:             1,
   name:           'Bender',
   power:          1,
   control:        2,
@@ -19,6 +21,7 @@ Character::Nature.create!(
   intelligence:   3
 )
 Character::Nature.create!(
+  id:             2,
   name:           'Mecha',
   power:          1,
   control:        1,

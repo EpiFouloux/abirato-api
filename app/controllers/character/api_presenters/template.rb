@@ -5,6 +5,7 @@ module Character::ApiPresenter
       def format(template)
         return {} if template.nil?
         res = {
+          id:       template.id,
           name:     template.name,
           icon:     template.icon_id,
           picture:  template.picture_id
