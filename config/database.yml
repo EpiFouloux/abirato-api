@@ -50,6 +50,7 @@ test:
 #
 production:
   <<: *default
+  ur: <%= ENV['DATABASE_URL'] %>
   database: abirato_api_production
   username: abirato_api
   password: <%= ENV['ABIRATO_API_DATABASE_PASSWORD'] %>
