@@ -3,6 +3,8 @@ require 'rails_helper'
 RSpec.describe 'Character Instance API', type: :request do
   let(:user) { create(:user) }
   let(:user_id) { user.id }
+  let(:user2_id) { create(:user).id }
+  let(:headers) { valid_headers }
 
   context 'With existing character instances' do
     let(:template) { Character::Template.all.sample }
@@ -17,7 +19,7 @@ RSpec.describe 'Character Instance API', type: :request do
     let(:instance_id) { instances.first.id }
     describe 'GET /users/:id/characters' do
       before(:each) do
-        get "/users/#{user_id}/characters"
+        get "/users/#{user_id}/characters", params: {}, headers: headers
       end
 
       it 'returns instances' do
@@ -36,7 +38,7 @@ RSpec.describe 'Character Instance API', type: :request do
 
     describe 'GET /users/:id/characters/:id' do
       before(:each) do
-        get "/users/#{user_id}/characters/#{instance_id}"
+        get "/users/#{user_id}/characters/#{instance_id}", params: {}, headers: headers
       end
 
       context 'when the record exists' do
@@ -84,14 +86,14 @@ RSpec.describe 'Character Instance API', type: :request do
       {
         template_id: template.id,
         additive_trait: 'power',
-        name: 'Foobar',
+        name: 'Foobar'
       }
     }
 
     context 'when the request is valid' do
       before(:each) do
         expect(Character::Instance.count).to eq(0)
-        post "/users/#{user_id}/characters", params: valid_attributes
+        post "/users/#{user_id}/characters", params: valid_attributes.to_json, headers: headers
       end
 
       it 'creates a character' do
@@ -112,7 +114,7 @@ RSpec.describe 'Character Instance API', type: :request do
       }
 
       before(:each) do
-        post "/users/#{user_id}/characters", params: invalid_params
+        post "/users/#{user_id}/characters", params: invalid_params.to_json, headers: headers
       end
 
       it 'returns status code 422' do
@@ -125,10 +127,26 @@ RSpec.describe 'Character Instance API', type: :request do
       end
     end
 
+    context 'When the character does\'nt belong to the user' do
+
+      before(:each) do
+        expect(Character::Instance.count).to eq(0)
+        post "/users/#{user2_id}/characters", params: valid_attributes.to_json, headers: headers
+      end
+
+      it 'returns status code 403' do
+        expect(response).to have_http_status(403)
+      end
+
+      it 'should return forbidden error' do
+        expect(response.body)
+            .to match(/You can't edit an other user's characters/)
+      end
+    end
+
     context 'when the request is forbidden' do
       let(:invalid_params){
         {
-
             template_id: template.id,
             additive_trait: 'paware',
             name: 'Foobar',
@@ -136,7 +154,7 @@ RSpec.describe 'Character Instance API', type: :request do
       }
 
       before(:each) do
-        post "/users/#{user_id}/characters", params: invalid_params
+        post "/users/#{user_id}/characters", params: invalid_params.to_json, headers: headers
       end
 
       it 'returns status code 400' do
@@ -162,7 +180,7 @@ RSpec.describe 'Character Instance API', type: :request do
 
     context 'when the record exists' do
       before(:each) do
-        put "/users/#{user_id}/characters/#{instance_id}", params: valid_attributes
+        put "/users/#{user_id}/characters/#{instance_id}", params: valid_attributes.to_json, headers: headers
       end
 
       it 'returns the object updated' do
@@ -187,8 +205,9 @@ RSpec.describe 'Character Instance API', type: :request do
     let!(:instance_id) { create(:character_instance).id }
 
     before(:each) do
+      byebug
       expect(Character::Instance.count).to eq(1)
-      delete "/users/#{user_id}/characters/#{instance_id}"
+      delete "/users/#{user_id}/characters/#{instance_id}", params: {}, headers: headers
     end
 
     it 'returns status code 204' do

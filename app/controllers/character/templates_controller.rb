@@ -2,6 +2,7 @@ require_relative 'api_presenters/template'
 
 class Character::TemplatesController < ApplicationController
   before_action :set_template, only: [:show]
+  skip_before_action :authorize_request, only: [:index, :show]
 
   # GET /templates
   def index
