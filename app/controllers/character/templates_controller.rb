@@ -7,7 +7,7 @@ class Character::TemplatesController < ApplicationController
   def index
     templates = Character::Template.all
     json_response(
-        templates.map { |n| Character::ApiPresenter::Template.format(n) }
+        templates.map { |t| Character::ApiPresenter::Template.format(t) }
     )
   end
 
