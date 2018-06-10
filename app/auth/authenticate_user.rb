@@ -1,4 +1,6 @@
 class AuthenticateUser
+  attr_reader :user
+
   def initialize(email, password)
     @email = email
     @password = password
@@ -6,7 +8,7 @@ class AuthenticateUser
 
   # Service entry point
   def call
-    JsonWebToken.encode(user_id: user.id) if user
+    JsonWebToken.encode(user_id: @user.id) if set_user
   end
 
   private
@@ -14,9 +16,9 @@ class AuthenticateUser
   attr_reader :email, :password
 
   # verify user credentials
-  def user
-    user = User.find_by(email: email)
-    return user if user && user.authenticate(password)
+  def set_user
+    @user = User.find_by(email: email)
+    return @user if @user&.authenticate(password)
     # raise Authentication error if credentials are invalid
     raise(ExceptionHandler::AuthenticationError, Message.invalid_credentials)
   end
