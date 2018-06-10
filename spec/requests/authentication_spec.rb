@@ -32,6 +32,7 @@ RSpec.describe 'Authentication', type: :request do
 
       it 'returns an authentication token' do
         expect(json[:auth_token]).not_to be_nil
+        expect(json[:user_id]).not_to be_nil
       end
     end
 
