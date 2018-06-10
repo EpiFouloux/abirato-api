@@ -21,8 +21,8 @@ module AbiratoApi
   class Application < Rails::Application
     # Initialize configuration defaults for originally generated Rails version.
     config.load_defaults 5.2
-
-    config.autoload_paths << Rails.root.join('lib')
+    config.eager_load = true
+    config.eager_load_paths << Rails.root.join('lib')
     config.autoload_paths << Rails.root.join('app/controllers/concerns')
     config.autoload_paths << Rails.root.join('app/models/concerns')
 
