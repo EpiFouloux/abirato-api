@@ -2,6 +2,7 @@ require_relative 'api_presenters/class'
 
 class Character::ClassesController < ApplicationController
   before_action :set_class, only: [:show]
+  skip_before_action :authorize_request, only: [:index, :show]
 
   # GET /classes
   def index

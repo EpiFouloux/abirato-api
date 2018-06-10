@@ -4,6 +4,8 @@ class Character::InstancesController < ApplicationController
 
   before_action :set_user
   before_action :set_character, only: %i[show update destroy]
+  before_action :check_user, only: %i[create update destroy]
+  skip_before_action :authorize_request, only: %i[index show]
 
   # GET /users/:id/characters
   def index
@@ -23,6 +25,7 @@ class Character::InstancesController < ApplicationController
     params.require(:template_id)
     params.require(:name)
     params.require(:additive_trait)
+
     template = Character::Template.find(params[:template_id])
     raise ActiveModel::ForbiddenAttributesError, 'Additive trait is invalid' unless Character::Traits::TRAITS_NAMES.include? params[:additive_trait]
     key = "additive_#{params[:additive_trait]}"
@@ -76,5 +79,9 @@ class Character::InstancesController < ApplicationController
 
   def set_character
     @character = Character::Instance.find(params[:id])
+  end
+
+  def check_user
+    raise ForbiddenError, "You can't edit an other user's characters" if @user != current_user
   end
 end
