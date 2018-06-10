@@ -205,7 +205,6 @@ RSpec.describe 'Character Instance API', type: :request do
     let!(:instance_id) { create(:character_instance).id }
 
     before(:each) do
-      byebug
       expect(Character::Instance.count).to eq(1)
       delete "/users/#{user_id}/characters/#{instance_id}", params: {}, headers: headers
     end
