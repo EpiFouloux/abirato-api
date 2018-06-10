@@ -7,4 +7,5 @@ Rails.application.routes.draw do
 
   resources :natures, controller: 'character/natures', only: [:index, :show]
   resources :templates, controller: 'character/templates', only: [:index, :show]
+  resources :classes, controller: 'character/classes', only: [:index, :show]
 end
