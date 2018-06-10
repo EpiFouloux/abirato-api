@@ -8,8 +8,8 @@ class Character::Nature < ApplicationRecord
   def modifiers
     {
       constitution:   constitution,
-      strength:     strength,
-      dexterity:     dexterity,
+      strength:       strength,
+      dexterity:      dexterity,
       intelligence:   intelligence
     }
   end
