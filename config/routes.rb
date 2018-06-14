@@ -12,4 +12,6 @@ Rails.application.routes.draw do
   # Auth
   post 'auth/login', to: 'authentication#authenticate'
   post 'signup', to: 'users#create'
+
+  get '/health', to: 'health#index'
 end
