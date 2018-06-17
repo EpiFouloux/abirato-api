@@ -33,7 +33,6 @@ module Character::Traits
   # helpers
 
   def validate_unique_traits
-    byebug
     same_traits = self.class.where(power: power, control: control, swiftness: swiftness)
     errors.add(:traits, 'already exist in database') unless same_traits.count == 0 || (same_traits.count == 1 && same_traits.first == self)
   end
