@@ -78,15 +78,15 @@ class Character::Instance < ApplicationRecord
   # Traits
 
   def power
-    (nature&.power).to_i + additive_power
+    (nature&.power).to_i + additive_power.to_i
   end
 
   def control
-    (nature&.control).to_i + additive_control
+    (nature&.control).to_i + additive_control.to_i
   end
 
   def swiftness
-    (nature&.swiftness).to_i + additive_swiftness
+    (nature&.swiftness).to_i + additive_swiftness.to_i
   end
 
   # Modifiers

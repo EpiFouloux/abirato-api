@@ -3,6 +3,18 @@ require 'rails_helper'
 RSpec.describe Character::Instance, type: :model do
   describe 'basic validations' do
     it { is_expected.to validate_presence_of(:name) }
+    it { is_expected.to validate_presence_of(:experience_amount) }
+    it { is_expected.to validate_presence_of(:additive_power) }
+    it { is_expected.to validate_presence_of(:additive_swiftness) }
+    it { is_expected.to validate_presence_of(:additive_control) }
+    it { is_expected.to validate_presence_of(:additive_strength) }
+    it { is_expected.to validate_presence_of(:additive_constitution) }
+    it { is_expected.to validate_presence_of(:additive_dexterity) }
+    it { is_expected.to validate_presence_of(:additive_intelligence) }
+    it { is_expected.to validate_presence_of(:grown_strength) }
+    it { is_expected.to validate_presence_of(:grown_constitution) }
+    it { is_expected.to validate_presence_of(:grown_dexterity) }
+    it { is_expected.to validate_presence_of(:grown_intelligence) }
     it { is_expected.to belong_to(:user) }
     it { is_expected.to belong_to(:template) }
     it { is_expected.to have_many(:events).dependent(:destroy) }

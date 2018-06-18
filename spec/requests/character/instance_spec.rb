@@ -166,6 +166,7 @@ RSpec.describe 'Character Instance API', type: :request do
       before(:each) do
         instance.user = user
         instance.level = 10
+        instance.waiting_trait = true
         instance.save!
         put "/characters/#{instance_id}", params: valid_attributes.to_json, headers: headers
       end
@@ -192,7 +193,7 @@ RSpec.describe 'Character Instance API', type: :request do
         put "/characters/#{instance_id}", params: valid_attributes.to_json, headers: headers
       end
 
-      it 'returns the object updated' do
+      it 'returns an error message' do
         expect(json[:message]).to eq("You can't edit an other user's characters")
       end
 
@@ -211,12 +212,13 @@ RSpec.describe 'Character Instance API', type: :request do
     context 'when the record exists and the level is incorrect' do
       before(:each) do
         instance.user = user
+        instance.level = 5
         instance.save!
         put "/characters/#{instance_id}", params: valid_attributes.to_json, headers: headers
       end
 
-      it 'returns the object updated' do
-        expect(json[:message]).to eq("Validation failed: Level does not match the associated class category: level: 1, class category: 1")
+      it 'returns an error message' do
+        expect(json[:message]).to eq("Validation failed: Level does not match the associated class category: level: 5, class category: 1")
       end
 
       it "doesn't update the record" do
