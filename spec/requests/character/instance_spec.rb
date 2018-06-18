@@ -17,6 +17,7 @@ RSpec.describe 'Character Instance API', type: :request do
       )
     }
     let(:instance_id) { instances.first.id }
+
     describe 'GET /users/:id/characters' do
       before(:each) do
         get "/users/#{user_id}/characters", params: {}, headers: headers
@@ -36,9 +37,9 @@ RSpec.describe 'Character Instance API', type: :request do
       end
     end
 
-    describe 'GET /users/:id/characters/:id' do
+    describe 'GET /characters/:id' do
       before(:each) do
-        get "/users/#{user_id}/characters/#{instance_id}", params: {}, headers: headers
+        get "/characters/#{instance_id}", params: {}, headers: headers
       end
 
       context 'when the record exists' do
@@ -80,7 +81,7 @@ RSpec.describe 'Character Instance API', type: :request do
     end
   end
 
-  describe 'POST /users/:id/characters' do
+  describe 'POST /characters' do
     let(:template) { Character::Template.all.sample }
     let(:valid_attributes) {
       {
@@ -93,7 +94,7 @@ RSpec.describe 'Character Instance API', type: :request do
     context 'when the request is valid' do
       before(:each) do
         expect(Character::Instance.count).to eq(0)
-        post "/users/#{user_id}/characters", params: valid_attributes.to_json, headers: headers
+        post "/characters", params: valid_attributes.to_json, headers: headers
       end
 
       it 'creates a character' do
@@ -114,7 +115,7 @@ RSpec.describe 'Character Instance API', type: :request do
       }
 
       before(:each) do
-        post "/users/#{user_id}/characters", params: invalid_params.to_json, headers: headers
+        post "/characters", params: invalid_params.to_json, headers: headers
       end
 
       it 'returns status code 422' do
@@ -124,23 +125,6 @@ RSpec.describe 'Character Instance API', type: :request do
       it 'returns a validation failure message' do
         expect(response.body)
           .to match(/param is missing or the value is empty: template_id/)
-      end
-    end
-
-    context 'When the character does\'nt belong to the user' do
-
-      before(:each) do
-        expect(Character::Instance.count).to eq(0)
-        post "/users/#{user2_id}/characters", params: valid_attributes.to_json, headers: headers
-      end
-
-      it 'returns status code 403' do
-        expect(response).to have_http_status(403)
-      end
-
-      it 'should return forbidden error' do
-        expect(response.body)
-            .to match(/You can't edit an other user's characters/)
       end
     end
 
@@ -154,7 +138,7 @@ RSpec.describe 'Character Instance API', type: :request do
       }
 
       before(:each) do
-        post "/users/#{user_id}/characters", params: invalid_params.to_json, headers: headers
+        post "/characters", params: invalid_params.to_json, headers: headers
       end
 
       it 'returns status code 400' do
@@ -168,7 +152,7 @@ RSpec.describe 'Character Instance API', type: :request do
     end
   end
 
-  describe 'PUT /users/:id/characters/:id' do
+  describe 'PUT /characters/:id' do
     let(:valid_attributes) {
       {
         additive_trait: 'control',
@@ -178,9 +162,11 @@ RSpec.describe 'Character Instance API', type: :request do
     let(:instance) { create(:character_instance, additive_power: 0, additive_control: 0, additive_swiftness: 1) }
     let(:instance_id) { instance.id }
 
-    context 'when the record exists' do
+    context 'when the record exists and the user is correct' do
       before(:each) do
-        put "/users/#{user_id}/characters/#{instance_id}", params: valid_attributes.to_json, headers: headers
+        instance.user = user
+        instance.save!
+        put "/characters/#{instance_id}", params: valid_attributes.to_json, headers: headers
       end
 
       it 'returns the object updated' do
@@ -199,19 +185,57 @@ RSpec.describe 'Character Instance API', type: :request do
         expect(response).to have_http_status(200)
       end
     end
+
+    context 'when the record exists and the user is incorrect' do
+      before(:each) do
+        put "/characters/#{instance_id}", params: valid_attributes.to_json, headers: headers
+      end
+
+      it 'returns the object updated' do
+        expect(json[:message]).to eq("You can't edit an other user's characters")
+      end
+
+      it "doesn't update the record" do
+        expect(instance.additive_control).to eq(0)
+        instance.reload
+        expect(instance.additive_control). to eq(0)
+        expect(instance.name).not_to eq(valid_attributes[:name])
+      end
+
+      it 'returns status code 403' do
+        expect(response).to have_http_status(403)
+      end
+    end
   end
 
-  describe 'DELETE /users/:id/characters/:id' do
-    let!(:instance_id) { create(:character_instance).id }
+  describe 'DELETE /characters/:id' do
+    let(:instance) { create(:character_instance) }
+    let!(:instance_id) { instance.id }
 
-    before(:each) do
-      expect(Character::Instance.count).to eq(1)
-      delete "/users/#{user_id}/characters/#{instance_id}", params: {}, headers: headers
+    context 'when the record exists and the user is correct' do
+      before(:each) do
+        instance.user = user
+        instance.save!
+        expect(Character::Instance.count).to eq(1)
+        delete "/characters/#{instance_id}", params: {}, headers: headers
+      end
+
+      it 'returns status code 204' do
+        expect(response).to have_http_status(204)
+        expect(Character::Instance.count).to eq(0)
+      end
     end
 
-    it 'returns status code 204' do
-      expect(response).to have_http_status(204)
-      expect(Character::Instance.count).to eq(0)
+    context 'when the record exists and the user is incorrect' do
+      before(:each) do
+        expect(Character::Instance.count).to eq(1)
+        delete "/characters/#{instance_id}", params: {}, headers: headers
+      end
+
+      it 'returns status code 403' do
+        expect(response).to have_http_status(403)
+        expect(Character::Instance.count).to eq(1)
+      end
     end
   end
 end
