@@ -32,6 +32,11 @@ module Character::Traits
 
   # helpers
 
+  def validate_unique_traits
+    same_traits = self.class.where(power: power, control: control, swiftness: swiftness)
+    errors.add(:traits, 'already exist in database') unless same_traits.count == 0 || (same_traits.count == 1 && same_traits.first == self)
+  end
+
   def traits_sum
     sum = 0
     traits.each do |key, value|

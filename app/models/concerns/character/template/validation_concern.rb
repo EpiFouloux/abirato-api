@@ -19,7 +19,9 @@ module Character::Template::ValidationConcern
       skills.each do |key1, value1|
         skills.each do |key2, value2|
           next if value1.nil?
-          errors.add(key1, "is not unique !") if Character::Template.where("#{key2}_id = #{value1}").count != 0
+          same_templates = Character::Template.where("#{key2}_id = #{value1}")
+          errors.add(key1, "is not unique !") unless same_templates.count == 0 ||
+                                                     (same_templates.count == 1 && same_templates.first == self)
         end
       end
     end

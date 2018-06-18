@@ -63,7 +63,7 @@ RSpec.describe Character::Class, type: :model do
             power: special_class.power,
             control: special_class.control,
             swiftness: special_class.swiftness,
-            skill_id: 1
+            skill_id: 1000
           )
         } .to raise_error(ActiveRecord::RecordInvalid, /Traits already exist in database/)
       end

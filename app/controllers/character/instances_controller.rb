@@ -2,9 +2,9 @@ require_relative 'api_presenters/instance'
 
 class Character::InstancesController < ApplicationController
 
-  before_action :set_user
+  before_action :set_user, only: %i[index]
   before_action :set_character, only: %i[show update destroy]
-  before_action :check_user, only: %i[create update destroy]
+  append_before_action :verify_user, only: %i[update destroy]
   skip_before_action :authorize_request, only: %i[index show]
 
   # GET /users/:id/characters
@@ -15,12 +15,12 @@ class Character::InstancesController < ApplicationController
     )
   end
 
-  # GET /users/:id/characters/:id
+  # GET characters/:id
   def show
     json_response(Character::ApiPresenter::Instance.format(@character))
   end
 
-  # POST /users/:id/characters
+  # POST /characters
   def create
     params.require(:template_id)
     params.require(:name)
@@ -33,7 +33,7 @@ class Character::InstancesController < ApplicationController
       template:       template,
       nature:         template.nature,
       name:           params[:name],
-      user:           @user,
+      user:           current_user,
       level:          1,
     )
     character[key.to_sym] = 1
@@ -41,7 +41,7 @@ class Character::InstancesController < ApplicationController
     json_response(Character::ApiPresenter::Instance.format(character), :created)
   end
 
-  # PUT /users/:id/characters/:id
+  # PUT /characters/:id
   def update
     permitted = params.permit(
       :name,
@@ -65,7 +65,7 @@ class Character::InstancesController < ApplicationController
     json_response(Character::ApiPresenter::Instance.format(@character))
   end
 
-  # DELETE /users/:id/characters/:id
+  # DELETE /characters/:id
   def destroy
     @character.destroy!
     head :no_content
@@ -81,7 +81,7 @@ class Character::InstancesController < ApplicationController
     @character = Character::Instance.find(params[:id])
   end
 
-  def check_user
-    raise ForbiddenError, "You can't edit an other user's characters" if @user != current_user
+  def verify_user
+    raise ForbiddenError, "You can't edit an other user's characters" if @character.user != current_user
   end
 end
