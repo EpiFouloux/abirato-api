@@ -19,7 +19,7 @@ module Character::Nature::ValidationConcern
     validates :intelligence, presence: true
 
     # Helpers
-    validate :unique_traits
+    validate :validate_unique_traits
 
     # Complex Verifications
     validate :valid_traits_sum
@@ -37,11 +37,6 @@ module Character::Nature::ValidationConcern
   end
 
   private
-
-  def unique_traits
-    count = Character::Nature.where(power: power, control: control, swiftness: swiftness).count
-    errors.add(:traits, 'already exist in database') unless count == 0
-  end
 
   def valid_traits_sum
     sum = traits_sum

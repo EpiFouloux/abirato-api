@@ -16,7 +16,7 @@ module Character::Class::ValidationConcern
     validates_uniqueness_of :skill_id
 
     # validation helpers
-    validate :unique_traits
+    validate :validate_unique_traits
     validate :valid_type
   end
 
@@ -29,11 +29,6 @@ module Character::Class::ValidationConcern
         PRESTIGIOUS,
         LEGENDARY
     ].freeze
-  end
-
-  def unique_traits
-    count = Character::Class.where(power: power, control: control, swiftness: swiftness).count
-    errors.add(:traits, 'already exist in database') unless count == 0
   end
 
   def valid_type

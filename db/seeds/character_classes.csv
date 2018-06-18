@@ -1,0 +1,38 @@
+id;name;power;control;swiftness;class_type;skill_id
+0;Fighter;3;0;1;0;0
+1;Wanderer;2;0;2;0;1
+2;Adept;2;1;1;0;2
+3;Trickster;1;1;2;0;3
+4;Stalker;1;2;1;0;4
+5;Mage;1;3;0;0;5
+6;Sorcerer;2;2;0;0;6
+7;Warrior;4;0;1;1;7
+8;Monk;3;0;2;1;8
+9;Rogue;2;0;3;1;9
+10;Executioner;3;1;1;1;10
+11;Scoundrel;2;1;2;1;11
+12;Hexer;2;2;1;1;12
+13;Artist;1;3;1;1;13
+14;Hunter;1;2;2;1;14
+15;Blood Mage;2;3;0;1;15
+16;Choreographer;1;4;0;1;16
+17;Warlock;3;2;0;1;17
+18;Dancer;1;1;3;1;18
+19;Phoenix;5;0;1;2;19
+20;Duelist;2;0;4;2;20
+21;Ravager;4;0;2;2;21
+22;Assassin;3;0;3;2;22
+23;Guardian;4;1;1;2;23
+24;Punisher;3;1;2;2;24
+25;Shadow Dancer;2;1;3;2;25
+26;Sadist;2;3;1;2;26
+27;Eldric Knight;3;2;1;2;27
+28;Banished;2;2;2;2;28
+29;Musician;1;4;1;2;29
+30;Haunted;1;3;2;2;30
+31;Jester;1;2;3;2;31
+32;Archmage;3;3;0;2;32
+33;Occultist;2;4;0;2;33
+34;Puppeteer;1;5;0;2;34
+35;Hellbreed;4;2;0;2;35
+36;Aerialist;1;1;4;2;36
