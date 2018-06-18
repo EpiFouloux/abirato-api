@@ -4,8 +4,6 @@ module Character::Template::ValidationConcern
   extend ActiveSupport::Concern
 
   included do
-    belongs_to :nature, class_name: 'Nature', foreign_key: 'character_nature_id'
-
     validates :name, presence: true
     validates :skill_one_id, presence: true
     validates :skill_two_id, presence: true

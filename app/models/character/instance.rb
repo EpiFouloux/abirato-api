@@ -2,6 +2,7 @@ class Character::Instance < ApplicationRecord
   include Character::Traits
   included Character::Modifiers
   include Character::Instance::ValidationConcern
+  include Character::Instance::RelationsConcern
 
   before_validation :handle_traits
 

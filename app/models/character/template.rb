@@ -1,5 +1,6 @@
 class Character::Template < ApplicationRecord
   include Character::Template::ValidationConcern
+  include Character::Template::RelationsConcern
 
   def skill_ids
     [

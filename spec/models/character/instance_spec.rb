@@ -18,6 +18,23 @@ RSpec.describe Character::Instance, type: :model do
         expect { create(:character_instance) }.not_to raise_error
       end
     end
+
+    context 'with an additive trait' do
+      let(:instance) { create(:character_instance) }
+
+      before(:each) do
+        instance.additive_swiftness = 1
+      end
+
+      it 'should be valid with correct level' do
+        instance.level = 15
+        expect { instance.save!  }.not_to raise_error
+      end
+
+      it 'should raise error with incorrect level' do
+        expect { instance.save!  }.to raise_error(ActiveRecord::RecordInvalid)
+      end
+    end
   end
 
   describe 'methods' do
@@ -29,10 +46,11 @@ RSpec.describe Character::Instance, type: :model do
       end
 
       it 'should return the prestigious class for a leveled character' do
-        instance.prestigious_class = Character::Class.where(power: instance.power, control: instance.control, swiftness: instance.swiftness + 1).first
+        instance.level = 15
+        prestigious_class = Character::Class.where(power: instance.power, control: instance.control, swiftness: instance.swiftness + 1).first
         instance.additive_swiftness = 1
-        instance.save!
-        expect(instance.current_class).to eq(instance.prestigious_class)
+        expect { instance.save!  }.not_to raise_error
+        expect(instance.current_class).to eq(prestigious_class)
       end
     end
 
@@ -43,12 +61,13 @@ RSpec.describe Character::Instance, type: :model do
       end
 
       it 'should return two classes for a leveled character' do
-        instance.prestigious_class = Character::Class.where(power: instance.power, control: instance.control, swiftness: instance.swiftness + 1).first
+        instance.level = 15
+        prestigious_class = Character::Class.where(power: instance.power, control: instance.control, swiftness: instance.swiftness + 1).first
         instance.additive_swiftness = 1
         instance.save!
         expect(instance.classes.count).to eq(2)
         expect(instance.classes.first).to eq(instance.special_class)
-        expect(instance.classes.last).to eq(instance.prestigious_class)
+        expect(instance.classes.last).to eq(prestigious_class)
       end
     end
 

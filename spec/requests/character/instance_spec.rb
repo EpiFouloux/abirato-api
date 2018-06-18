@@ -162,9 +162,10 @@ RSpec.describe 'Character Instance API', type: :request do
     let(:instance) { create(:character_instance, additive_power: 0, additive_control: 0, additive_swiftness: 1) }
     let(:instance_id) { instance.id }
 
-    context 'when the record exists and the user is correct' do
+    context 'when the record exists and the user and level is correct' do
       before(:each) do
         instance.user = user
+        instance.level = 10
         instance.save!
         put "/characters/#{instance_id}", params: valid_attributes.to_json, headers: headers
       end
@@ -204,6 +205,29 @@ RSpec.describe 'Character Instance API', type: :request do
 
       it 'returns status code 403' do
         expect(response).to have_http_status(403)
+      end
+    end
+
+    context 'when the record exists and the level is incorrect' do
+      before(:each) do
+        instance.user = user
+        instance.save!
+        put "/characters/#{instance_id}", params: valid_attributes.to_json, headers: headers
+      end
+
+      it 'returns the object updated' do
+        expect(json[:message]).to eq("Validation failed: Level does not match the associated class category: level: 1, class category: 1")
+      end
+
+      it "doesn't update the record" do
+        expect(instance.additive_control).to eq(0)
+        instance.reload
+        expect(instance.additive_control). to eq(0)
+        expect(instance.name).not_to eq(valid_attributes[:name])
+      end
+
+      it 'returns status code 422' do
+        expect(response).to have_http_status(422)
       end
     end
   end

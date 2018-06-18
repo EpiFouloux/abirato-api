@@ -4,6 +4,7 @@ class Character::Nature < ApplicationRecord
   include Character::Traits
   include Character::Modifiers
   include Character::Nature::ValidationConcern
+  include Character::Nature::RelationsConcern
 
   def modifiers
     {
