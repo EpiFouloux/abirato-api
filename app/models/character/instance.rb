@@ -5,24 +5,8 @@ class Character::Instance < ApplicationRecord
   include Character::Instance::RelationsConcern
 
   before_validation :handle_traits
-
-  def handle_traits
-    target_class = Character::Class.find_by_traits(traits)
-    return if target_class.nil?
-    if current_class.nil?
-      self.special_class = target_class
-      return
-    end
-    return if target_class == current_class
-    case current_class.class_type
-    when Character::Class::SPECIAL
-      self.prestigious_class = target_class
-    when Character::Class::PRESTIGIOUS
-      self.legendary_class = target_class
-    else
-      raise ActiveRecord::RecordInvalid, "The class category is invalid"
-    end
-  end
+  before_validation :handle_experience_amount, if: :experience_amount_changed?
+  before_save       :log_changed_attributes
 
   # helpers
 
@@ -36,6 +20,14 @@ class Character::Instance < ApplicationRecord
       prestigious_class,
       legendary_class
     ].compact
+  end
+
+  def class_keys
+    %i[
+      character_special_class_id
+      character_prestigious_class_id
+      character_legendary_class_id
+    ]
   end
 
   # Skills
@@ -105,5 +97,42 @@ class Character::Instance < ApplicationRecord
 
   def dexterity
     (nature&.dexterity).to_i + additive_dexterity
+  end
+
+  class << self
+    # Experience
+
+    def target_experience(target_level)
+      ((target_level**2) * 100).to_i
+    end
+
+    def target_level(target_xp)
+      return 0 if target_xp.nil?
+      Math.sqrt(target_xp / 100).to_i
+    end
+  end
+
+  private
+
+  def handle_traits
+    if class_category.nil?
+      errors.add(:traits, "must have at least one additive trait")
+      return false
+    end
+    target_class = Character::Class.find_by_traits(traits)
+    return if target_class == current_class
+    category = target_class.class_category
+    self[class_keys[category]] = target_class.id
+    category += 1
+    (category..Character::Class::LEGENDARY).each do |i|
+      self[class_keys[i]] = nil
+    end
+  end
+
+  def handle_experience_amount
+    self.level = self.class.target_level(self.experience_amount)
+  end
+
+  def log_changed_attributes
   end
 end

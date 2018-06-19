@@ -31,6 +31,7 @@ RSpec.describe Character::Instance, type: :model do
       end
     end
 
+
     context 'with an additive trait' do
       let(:instance) { create(:character_instance) }
 
@@ -38,13 +39,33 @@ RSpec.describe Character::Instance, type: :model do
         instance.additive_swiftness = 1
       end
 
-      it 'should be valid with correct level' do
-        instance.level = 15
+      it 'should be valid with correct level and experience' do
+        instance.experience_amount = Character::Instance.target_experience(15)
         expect { instance.save!  }.not_to raise_error
       end
 
       it 'should raise error with incorrect level' do
         expect { instance.save!  }.to raise_error(ActiveRecord::RecordInvalid)
+      end
+    end
+
+    context 'with wrong level' do
+      let(:instance) { create(:character_instance) }
+
+      it 'raise an error' do
+        instance.experience_amount = Character::Instance.target_experience(15)
+        expect { instance.save!  }.to raise_error(ActiveRecord::RecordInvalid)
+      end
+    end
+
+    context 'with wrong xp' do
+      let(:instance) { create(:character_instance) }
+
+      it 'doesn`t raise an error and applies correct level' do
+        instance.experience_amount = 1500
+        instance.level = 1
+        expect { instance.save! }.not_to raise_error
+        expect(instance.level).to eq 3
       end
     end
   end
@@ -58,7 +79,7 @@ RSpec.describe Character::Instance, type: :model do
       end
 
       it 'should return the prestigious class for a leveled character' do
-        instance.level = 15
+        instance.experience_amount = Character::Instance.target_experience(15)
         prestigious_class = Character::Class.where(power: instance.power, control: instance.control, swiftness: instance.swiftness + 1).first
         instance.additive_swiftness = 1
         expect { instance.save!  }.not_to raise_error
@@ -73,7 +94,7 @@ RSpec.describe Character::Instance, type: :model do
       end
 
       it 'should return two classes for a leveled character' do
-        instance.level = 15
+        instance.experience_amount = Character::Instance.target_experience(15)
         prestigious_class = Character::Class.where(power: instance.power, control: instance.control, swiftness: instance.swiftness + 1).first
         instance.additive_swiftness = 1
         instance.save!

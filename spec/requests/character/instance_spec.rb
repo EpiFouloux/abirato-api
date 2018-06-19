@@ -165,7 +165,7 @@ RSpec.describe 'Character Instance API', type: :request do
     context 'when the record exists and the user and level is correct' do
       before(:each) do
         instance.user = user
-        instance.level = 10
+        instance.experience_amount = Character::Instance.target_experience(10)
         instance.waiting_trait = true
         instance.save!
         put "/characters/#{instance_id}", params: valid_attributes.to_json, headers: headers
@@ -212,7 +212,7 @@ RSpec.describe 'Character Instance API', type: :request do
     context 'when the record exists and the level is incorrect' do
       before(:each) do
         instance.user = user
-        instance.level = 5
+        instance.experience_amount = Character::Instance.target_experience(5)
         instance.save!
         put "/characters/#{instance_id}", params: valid_attributes.to_json, headers: headers
       end
