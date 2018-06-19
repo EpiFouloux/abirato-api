@@ -100,6 +100,9 @@ RSpec.describe 'Character Instance API', type: :request do
       it 'creates a character' do
         expect(Character::Instance.count).to eq(1)
         expect(json[:name]).to eq('Foobar')
+        expect(json[:experience_amount]).to eq(100)
+        expect(json[:level]).to eq(1)
+        expect(json[:target_experience_amount]).to eq(400)
       end
 
       it 'returns status code 201' do
@@ -162,9 +165,11 @@ RSpec.describe 'Character Instance API', type: :request do
     let(:instance) { create(:character_instance, additive_power: 0, additive_control: 0, additive_swiftness: 1) }
     let(:instance_id) { instance.id }
 
-    context 'when the record exists and the user is correct' do
+    context 'when the record exists and the user and level is correct' do
       before(:each) do
         instance.user = user
+        instance.experience_amount = Character::Instance.target_experience(10)
+        instance.waiting_trait = true
         instance.save!
         put "/characters/#{instance_id}", params: valid_attributes.to_json, headers: headers
       end
@@ -191,7 +196,7 @@ RSpec.describe 'Character Instance API', type: :request do
         put "/characters/#{instance_id}", params: valid_attributes.to_json, headers: headers
       end
 
-      it 'returns the object updated' do
+      it 'returns an error message' do
         expect(json[:message]).to eq("You can't edit an other user's characters")
       end
 
@@ -204,6 +209,30 @@ RSpec.describe 'Character Instance API', type: :request do
 
       it 'returns status code 403' do
         expect(response).to have_http_status(403)
+      end
+    end
+
+    context 'when the record exists and the level is incorrect' do
+      before(:each) do
+        instance.user = user
+        instance.experience_amount = Character::Instance.target_experience(5)
+        instance.save!
+        put "/characters/#{instance_id}", params: valid_attributes.to_json, headers: headers
+      end
+
+      it 'returns an error message' do
+        expect(json[:message]).to eq("Validation failed: Level does not match the associated class category: level: 5, class category: 1")
+      end
+
+      it "doesn't update the record" do
+        expect(instance.additive_control).to eq(0)
+        instance.reload
+        expect(instance.additive_control). to eq(0)
+        expect(instance.name).not_to eq(valid_attributes[:name])
+      end
+
+      it 'returns status code 422' do
+        expect(response).to have_http_status(422)
       end
     end
   end

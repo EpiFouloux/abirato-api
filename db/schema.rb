@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2018_06_09_212054) do
+ActiveRecord::Schema.define(version: 2018_06_18_181606) do
 
   create_table "character_classes", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8", force: :cascade do |t|
     t.integer "power", limit: 1, null: false
@@ -57,6 +57,7 @@ ActiveRecord::Schema.define(version: 2018_06_09_212054) do
     t.datetime "updated_at", null: false
     t.bigint "character_prestigious_class_id"
     t.bigint "character_legendary_class_id"
+    t.boolean "waiting_trait", default: false
     t.index ["character_legendary_class_id"], name: "index_character_instances_on_character_legendary_class_id"
     t.index ["character_nature_id"], name: "index_character_instances_on_character_nature_id"
     t.index ["character_prestigious_class_id"], name: "index_character_instances_on_character_prestigious_class_id"

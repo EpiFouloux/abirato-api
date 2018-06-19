@@ -4,7 +4,7 @@ module Character::Class::ValidationConcern
   extend ActiveSupport::Concern
 
   included do
-    # Relations
+    # basic validations
     validates :name, presence: true
     validates :power, presence: true
     validates :control, presence: true

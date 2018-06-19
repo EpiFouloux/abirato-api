@@ -5,8 +5,10 @@ FactoryBot.define do
     user              { create(:user) }
     template          { Character::Template.all.sample }
     nature            { template.nature }
+    waiting_trait     { false }
     name              { Faker::Lorem.characters(5) }
     level             { 1 }
+    experience_amount { 150 }
     additive_power    { 1 }
     special_class     do
       Character::Class.find_by_traits(

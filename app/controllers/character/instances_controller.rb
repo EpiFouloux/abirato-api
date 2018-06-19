@@ -30,11 +30,11 @@ class Character::InstancesController < ApplicationController
     raise ActiveModel::ForbiddenAttributesError, 'Additive trait is invalid' unless Character::Traits::TRAITS_NAMES.include? params[:additive_trait]
     key = "additive_#{params[:additive_trait]}"
     character = Character::Instance.new(
-      template:       template,
-      nature:         template.nature,
-      name:           params[:name],
-      user:           current_user,
-      level:          1,
+      template:           template,
+      nature:             template.nature,
+      name:               params[:name],
+      user:               current_user,
+      experience_amount:  Character::Instance.target_experience(1)
     )
     character[key.to_sym] = 1
     character.save!

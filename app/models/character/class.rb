@@ -3,6 +3,7 @@
 class Character::Class < ApplicationRecord
   include Character::Traits
   include Character::Class::ValidationConcern
+  include Character::Class::RelationsConcern
 
   def traits
     {

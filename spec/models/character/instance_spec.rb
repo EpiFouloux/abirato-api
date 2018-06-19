@@ -3,6 +3,18 @@ require 'rails_helper'
 RSpec.describe Character::Instance, type: :model do
   describe 'basic validations' do
     it { is_expected.to validate_presence_of(:name) }
+    it { is_expected.to validate_presence_of(:experience_amount) }
+    it { is_expected.to validate_presence_of(:additive_power) }
+    it { is_expected.to validate_presence_of(:additive_swiftness) }
+    it { is_expected.to validate_presence_of(:additive_control) }
+    it { is_expected.to validate_presence_of(:additive_strength) }
+    it { is_expected.to validate_presence_of(:additive_constitution) }
+    it { is_expected.to validate_presence_of(:additive_dexterity) }
+    it { is_expected.to validate_presence_of(:additive_intelligence) }
+    it { is_expected.to validate_presence_of(:grown_strength) }
+    it { is_expected.to validate_presence_of(:grown_constitution) }
+    it { is_expected.to validate_presence_of(:grown_dexterity) }
+    it { is_expected.to validate_presence_of(:grown_intelligence) }
     it { is_expected.to belong_to(:user) }
     it { is_expected.to belong_to(:template) }
     it { is_expected.to have_many(:events).dependent(:destroy) }
@@ -18,6 +30,44 @@ RSpec.describe Character::Instance, type: :model do
         expect { create(:character_instance) }.not_to raise_error
       end
     end
+
+
+    context 'with an additive trait' do
+      let(:instance) { create(:character_instance) }
+
+      before(:each) do
+        instance.additive_swiftness = 1
+      end
+
+      it 'should be valid with correct level and experience' do
+        instance.experience_amount = Character::Instance.target_experience(15)
+        expect { instance.save!  }.not_to raise_error
+      end
+
+      it 'should raise error with incorrect level' do
+        expect { instance.save!  }.to raise_error(ActiveRecord::RecordInvalid)
+      end
+    end
+
+    context 'with wrong level' do
+      let(:instance) { create(:character_instance) }
+
+      it 'raise an error' do
+        instance.experience_amount = Character::Instance.target_experience(15)
+        expect { instance.save!  }.to raise_error(ActiveRecord::RecordInvalid)
+      end
+    end
+
+    context 'with wrong xp' do
+      let(:instance) { create(:character_instance) }
+
+      it 'doesn`t raise an error and applies correct level' do
+        instance.experience_amount = 1500
+        instance.level = 1
+        expect { instance.save! }.not_to raise_error
+        expect(instance.level).to eq 3
+      end
+    end
   end
 
   describe 'methods' do
@@ -29,10 +79,11 @@ RSpec.describe Character::Instance, type: :model do
       end
 
       it 'should return the prestigious class for a leveled character' do
-        instance.prestigious_class = Character::Class.where(power: instance.power, control: instance.control, swiftness: instance.swiftness + 1).first
+        instance.experience_amount = Character::Instance.target_experience(15)
+        prestigious_class = Character::Class.where(power: instance.power, control: instance.control, swiftness: instance.swiftness + 1).first
         instance.additive_swiftness = 1
-        instance.save!
-        expect(instance.current_class).to eq(instance.prestigious_class)
+        expect { instance.save!  }.not_to raise_error
+        expect(instance.current_class).to eq(prestigious_class)
       end
     end
 
@@ -43,12 +94,13 @@ RSpec.describe Character::Instance, type: :model do
       end
 
       it 'should return two classes for a leveled character' do
-        instance.prestigious_class = Character::Class.where(power: instance.power, control: instance.control, swiftness: instance.swiftness + 1).first
+        instance.experience_amount = Character::Instance.target_experience(15)
+        prestigious_class = Character::Class.where(power: instance.power, control: instance.control, swiftness: instance.swiftness + 1).first
         instance.additive_swiftness = 1
         instance.save!
         expect(instance.classes.count).to eq(2)
         expect(instance.classes.first).to eq(instance.special_class)
-        expect(instance.classes.last).to eq(instance.prestigious_class)
+        expect(instance.classes.last).to eq(prestigious_class)
       end
     end
 
