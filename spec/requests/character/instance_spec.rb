@@ -100,6 +100,9 @@ RSpec.describe 'Character Instance API', type: :request do
       it 'creates a character' do
         expect(Character::Instance.count).to eq(1)
         expect(json[:name]).to eq('Foobar')
+        expect(json[:experience_amount]).to eq(100)
+        expect(json[:level]).to eq(1)
+        expect(json[:target_experience_amount]).to eq(400)
       end
 
       it 'returns status code 201' do
