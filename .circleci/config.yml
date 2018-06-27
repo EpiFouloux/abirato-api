@@ -7,6 +7,9 @@ defaults: &defaults
         environment:
             - MYSQL_ALLOW_EMPTY_PASSWORD=yes
             - MYSQL_ROOT_HOST=%
+      - image: circleci/mongo
+        environment:
+            - DB_NAME: abirato_api_dev
 
 version: 2
 
