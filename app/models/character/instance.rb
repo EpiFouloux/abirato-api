@@ -6,7 +6,7 @@ class Character::Instance < ApplicationRecord
 
   before_validation :handle_traits
   before_validation :handle_experience_amount, if: :experience_amount_changed?
-  before_save       :log_changed_attributes
+  before_update       :log_changed_attributes
 
   # helpers
 
@@ -139,5 +139,12 @@ class Character::Instance < ApplicationRecord
   end
 
   def log_changed_attributes
+    return unless changed?
+    Character::Event.create!(
+      event_type: Character::Event::CHANGED_ATTRIBUTES,
+      event_date: Time.now,
+      character_instance_id: id,
+      event_data: changes
+    )
   end
 end
