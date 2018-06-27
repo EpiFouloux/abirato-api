@@ -17,7 +17,6 @@ RSpec.describe Character::Instance, type: :model do
     it { is_expected.to validate_presence_of(:grown_intelligence) }
     it { is_expected.to belong_to(:user) }
     it { is_expected.to belong_to(:template) }
-    it { is_expected.to have_many(:events).dependent(:destroy) }
     it { is_expected.to belong_to(:nature) }
     it { is_expected.to belong_to(:special_class) }
     it { is_expected.to belong_to(:prestigious_class) }
@@ -45,15 +44,6 @@ RSpec.describe Character::Instance, type: :model do
       end
 
       it 'should raise error with incorrect level' do
-        expect { instance.save!  }.to raise_error(ActiveRecord::RecordInvalid)
-      end
-    end
-
-    context 'with wrong level' do
-      let(:instance) { create(:character_instance) }
-
-      it 'raise an error' do
-        instance.experience_amount = Character::Instance.target_experience(15)
         expect { instance.save!  }.to raise_error(ActiveRecord::RecordInvalid)
       end
     end
@@ -135,6 +125,43 @@ RSpec.describe Character::Instance, type: :model do
         expect(traits[:power]).to eq(instance.nature.power + 1)
         expect(traits[:swiftness]).to eq(instance.nature.swiftness)
         expect(traits[:control]).to eq(instance.nature.control)
+      end
+    end
+
+    context '#waiting_traits?' do
+      let!(:instance) { create(:character_instance) }
+
+      it 'should be false on creation' do
+        expect(instance.waiting_trait?).to eq(false)
+      end
+
+      it 'should be false under next level step' do
+        instance.experience_amount = Character::Instance.target_experience(5)
+        instance.save!
+        expect(instance.level).to eq(5)
+        expect(instance.waiting_trait?).to eq(false)
+      end
+
+      it 'should be true if level is high enough' do
+        instance.experience_amount = Character::Instance.target_experience(10)
+        instance.save!
+        expect(instance.level).to eq(10)
+        expect(instance.waiting_trait?).to eq(true)
+      end
+
+      it 'should be false if level is high enough and trait is added' do
+        instance.experience_amount = Character::Instance.target_experience(10)
+        instance.additive_control += 1
+        instance.save!
+        expect(instance.level).to eq(10)
+        expect(instance.waiting_trait?).to eq(false)
+      end
+
+      it 'should be true if level is very high' do
+        instance.experience_amount = Character::Instance.target_experience(15)
+        instance.save!
+        expect(instance.level).to eq(15)
+        expect(instance.waiting_trait?).to eq(true)
       end
     end
   end

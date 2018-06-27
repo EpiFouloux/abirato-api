@@ -12,6 +12,8 @@ module Character::ApiPresenter
           target_experience_amount: instance.class.target_experience(instance.level + 1),
           nature:                   instance.character_nature_id,
           template:                 instance.character_template_id,
+          waiting_trait:            instance.waiting_trait?,
+          waiting_modifier:         instance.waiting_modifier?
         }
         res[:traits] =              instance.traits
         res[:modifiers] =           instance.modifiers

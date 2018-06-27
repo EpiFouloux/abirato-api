@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2018_06_18_181606) do
+ActiveRecord::Schema.define(version: 2018_06_09_212054) do
 
   create_table "character_classes", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8", force: :cascade do |t|
     t.integer "power", limit: 1, null: false
@@ -22,16 +22,6 @@ ActiveRecord::Schema.define(version: 2018_06_18_181606) do
     t.datetime "updated_at", null: false
     t.integer "class_type", null: false
     t.integer "skill_id"
-  end
-
-  create_table "character_events", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8", force: :cascade do |t|
-    t.datetime "event_date", null: false
-    t.string "event_type", null: false
-    t.text "event_data", null: false
-    t.bigint "character_instance_id"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-    t.index ["character_instance_id"], name: "index_character_events_on_character_instance_id"
   end
 
   create_table "character_instances", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8", force: :cascade do |t|
@@ -57,7 +47,6 @@ ActiveRecord::Schema.define(version: 2018_06_18_181606) do
     t.datetime "updated_at", null: false
     t.bigint "character_prestigious_class_id"
     t.bigint "character_legendary_class_id"
-    t.boolean "waiting_trait", default: false
     t.index ["character_legendary_class_id"], name: "index_character_instances_on_character_legendary_class_id"
     t.index ["character_nature_id"], name: "index_character_instances_on_character_nature_id"
     t.index ["character_prestigious_class_id"], name: "index_character_instances_on_character_prestigious_class_id"
@@ -107,7 +96,6 @@ ActiveRecord::Schema.define(version: 2018_06_18_181606) do
     t.integer "experience_amount", default: 0, null: false
   end
 
-  add_foreign_key "character_events", "character_instances"
   add_foreign_key "character_instances", "character_classes", column: "character_legendary_class_id"
   add_foreign_key "character_instances", "character_classes", column: "character_prestigious_class_id"
   add_foreign_key "character_instances", "character_classes", column: "character_special_class_id"
