@@ -6,7 +6,7 @@ class Character::Instance < ApplicationRecord
 
   before_validation :handle_traits
   before_validation :handle_experience_amount, if: :experience_amount_changed?
-  before_update       :log_changed_attributes
+  before_update     :log_changed_attributes
 
   # helpers
 

@@ -28,8 +28,11 @@ RSpec.describe Character::Instance, type: :model do
       it 'should be valid' do
         expect { create(:character_instance) }.not_to raise_error
       end
-    end
 
+      it 'should not create events' do
+        expect{ create(:character_instance) }.not_to change{ Character::Event.count }
+      end
+    end
 
     context 'with an additive trait' do
       let(:instance) { create(:character_instance) }

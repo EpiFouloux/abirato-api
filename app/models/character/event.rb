@@ -19,8 +19,11 @@ class Character::Event
   def apply_event_data
     case event_type
     when EXPERIENCE_TYPE
-      character_instance.experience_amount += event_data[:amount] if event_data
-      character_instance.save!
+      if event_data
+        character = character_instance
+        character.experience_amount += event_data[:amount]
+        character.save!
+      end
     end
   end
 end

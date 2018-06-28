@@ -79,10 +79,10 @@ RSpec.configure do |config|
 
   # start the transaction strategy as examples are run
   config.around(:each) do |example|
+    Character::Event.destroy_all
     DatabaseCleaner.cleaning do
       example.run
     end
-
   end
 end
 
