@@ -10,7 +10,7 @@ module Character::Instance::RelationsConcern
     belongs_to :legendary_class, class_name: "Class", foreign_key: 'character_legendary_class_id', required: false
 
     def events
-      Character::Event.where(character_instance_id: id)
+      Character::Event.where(character_instance_id: id).entries
     end
 
     def current_class
