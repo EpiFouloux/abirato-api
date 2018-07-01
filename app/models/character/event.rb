@@ -12,7 +12,7 @@ class Character::Event
   field :event_date, type: DateTime
   field :event_data, type: Hash
 
-  index({ character_instance_id: 1 }, unique: true)
+ # index({ character_instance_id: 1 }, unique: true) TODO: Add to history object
 
   private
 
