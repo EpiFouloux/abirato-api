@@ -9,6 +9,28 @@ module Character::Instance::RelationsConcern
     belongs_to :prestigious_class, class_name: "Class", foreign_key: 'character_prestigious_class_id', required: false
     belongs_to :legendary_class, class_name: "Class", foreign_key: 'character_legendary_class_id', required: false
 
-    has_many :events, class_name: "Event", foreign_key: "character_instance_id", dependent: :destroy
+    def events
+      Character::Event.where(character_instance_id: id).entries
+    end
+
+    def current_class
+      classes.last
+    end
+
+    def classes
+      [
+        special_class,
+        prestigious_class,
+        legendary_class
+      ].compact
+    end
+
+    def class_keys
+      %i[
+        character_special_class_id
+        character_prestigious_class_id
+        character_legendary_class_id
+      ]
+    end
   end
 end

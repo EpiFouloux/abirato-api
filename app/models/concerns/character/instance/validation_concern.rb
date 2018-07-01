@@ -7,7 +7,6 @@ module Character::Instance::ValidationConcern
     validates :name,                  presence: true, length: { minimum: 5, maximum: 15 }
     validates :level,                 presence: true, inclusion: 0..29
     validates :experience_amount,     presence: true
-    validates :waiting_trait,         inclusion: [true, false]
 
     # Self characteristics
 
@@ -34,12 +33,7 @@ module Character::Instance::ValidationConcern
 
     # Class and level
     validate do
-      if level < CLASS_CATEGORIES_LEVEL_MIN[class_category.to_i]
-        errors.add(:level, "does not match the associated class category: level: #{level}, class category: #{class_category}")
-        errors.add(:level, "doesn't allow the character to be waiting for a trait") if waiting_trait
-      elsif level >= CLASS_CATEGORIES_LEVEL_MIN[class_category.to_i + 1]
-        errors.add(:level, "is too high for current traits, should be awaiting a new trait") unless waiting_trait
-      end
+      errors.add(:level, "does not match the associated class category: level: #{level}, class category: #{class_category}") if level < CLASS_CATEGORIES_LEVEL_MIN[class_category.to_i]
     end
 
     # Experience and level

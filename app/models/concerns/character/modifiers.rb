@@ -27,6 +27,14 @@ module Character::Modifiers
       DEXTERITY,
       INTELLIGENCE
     ].freeze
+
+    ADDITIVE_MODIFIER_LEVELS = [
+      5,
+      10,
+      15,
+      20,
+      25
+    ].freeze
   end
 
   # Helpers
@@ -34,7 +42,7 @@ module Character::Modifiers
   def modifiers_sum
     sum = 0
     modifiers.each do |key, value|
-      sum += value.to_i  unless value.nil?
+      sum += value.to_i unless value.nil?
     end
     sum
   end

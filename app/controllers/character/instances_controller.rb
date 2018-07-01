@@ -53,11 +53,13 @@ class Character::InstancesController < ApplicationController
     @character.experience_amount += permitted[:experience_amount] if permitted[:experience_amount]
     if permitted[:additive_trait]
       raise ActiveModel::ForbiddenAttributesError, 'Additive trait is invalid' unless Character::Traits::TRAITS_NAMES.include? params[:additive_trait]
+      raise ExceptionHandler::ForbiddenError, 'Character is not waiting for any trait' unless @character.waiting_trait?
       key = "additive_#{permitted[:additive_trait]}"
       @character[key.to_sym] += 1
     end
     if permitted[:additive_modifier]
       raise ActiveModel::ForbiddenAttributesError, 'Additive modifier is invalid' unless Character::Modifiers::MODIFIERS_NAMES.include? params[:additive_modifier]
+      raise ExceptionHandler::ForbiddenError, 'Character is not waiting for any modifier' unless @character.waiting_modifier?
       key = "additive_#{permitted[:additive_modifier]}"
       @character[key.to_sym] += 1
     end

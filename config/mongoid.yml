@@ -1,0 +1,43 @@
+default: &default
+  clients:
+    default:
+      database: <%= ENV['DATABASE_NAME'] %>
+      hosts:
+        - <%= ENV['DATABASE_HOST1'] %>
+        - <%= ENV['DATABASE_HOST2'] %>
+        - <%= ENV['DATABASE_HOST3'] %>
+      options:
+        user: <%= ENV['DATABASE_USER'] %>
+        password: <%= ENV['DATABASE_PASSWORD'] %>
+        replica_set: <%= ENV['DATABASE_REPLICA_SET'] %>
+        ssl: true
+        auth_source: admin
+
+production:
+  <<: *default
+
+demo:
+  <<: *default
+
+staging:
+  <<: *default
+
+sandbox:
+  <<: *default
+
+development:
+  clients:
+    default:
+      database: abirato_api_dev
+      hosts:
+        - <%= ENV['DATABASE_HOST'] || 'localhost:27017' %>
+
+test: &test
+  clients:
+    default:
+      database: abirato_api_dev
+      hosts:
+        - <%= ENV['DATABASE_HOST'] || 'localhost:27017' %>
+
+cucumber:
+  <<: *test

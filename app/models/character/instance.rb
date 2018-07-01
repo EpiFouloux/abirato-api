@@ -1,33 +1,21 @@
 class Character::Instance < ApplicationRecord
   include Character::Traits
-  included Character::Modifiers
+  include Character::Modifiers
   include Character::Instance::ValidationConcern
   include Character::Instance::RelationsConcern
 
   before_validation :handle_traits
   before_validation :handle_experience_amount, if: :experience_amount_changed?
-  before_save       :log_changed_attributes
+  before_update     :log_changed_attributes
 
   # helpers
 
-  def current_class
-    classes.last
+  def waiting_trait?
+    level >= CLASS_CATEGORIES_LEVEL_MIN[class_category.to_i + 1]
   end
 
-  def classes
-    [
-      special_class,
-      prestigious_class,
-      legendary_class
-    ].compact
-  end
-
-  def class_keys
-    %i[
-      character_special_class_id
-      character_prestigious_class_id
-      character_legendary_class_id
-    ]
+  def waiting_modifier?
+    level >= ADDITIVE_MODIFIER_LEVELS[additive_modifiers_sum]
   end
 
   # Skills
@@ -59,12 +47,29 @@ class Character::Instance < ApplicationRecord
     }
   end
 
+  def additive_modifiers
+    {
+      constitution:   additive_constitution,
+      strength:       additive_strength,
+      dexterity:      additive_dexterity,
+      intelligence:   additive_intelligence
+    }
+  end
+
   def traits
     {
       power:      power,
       control:    control,
-      swiftness:  swiftness,
+      swiftness:  swiftness
     }
+  end
+
+  def additive_modifiers_sum
+    sum = 0
+    additive_modifiers.each do |key, value|
+      sum += value.to_i unless value.nil?
+    end
+    sum
   end
 
   # Traits
@@ -84,19 +89,19 @@ class Character::Instance < ApplicationRecord
   # Modifiers
 
   def constitution
-    (nature&.constitution).to_i + additive_constitution
+    (nature&.constitution).to_i + additive_constitution.to_i
   end
 
   def strength
-    (nature&.strength).to_i + additive_strength
+    (nature&.strength).to_i + additive_strength.to_i
   end
 
   def intelligence
-    (nature&.intelligence).to_i + additive_intelligence
+    (nature&.intelligence).to_i + additive_intelligence.to_i
   end
 
   def dexterity
-    (nature&.dexterity).to_i + additive_dexterity
+    (nature&.dexterity).to_i + additive_dexterity.to_i
   end
 
   class << self
@@ -134,5 +139,12 @@ class Character::Instance < ApplicationRecord
   end
 
   def log_changed_attributes
+    return unless changed?
+    Character::Event.create!(
+      event_type: Character::Event::CHANGED_ATTRIBUTES,
+      event_date: Time.now,
+      character_instance_id: id,
+      event_data: changes
+    )
   end
 end

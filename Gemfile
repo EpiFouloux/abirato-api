@@ -17,6 +17,9 @@ gem 'bcrypt', '~> 3.1.7'
 gem 'jwt'
 # parameter validation schemas
 gem 'dry-validation'
+# mongo db
+gem 'mongoid'
+gem 'mongoid-pagination'
 
 # Reduces boot times through caching; required in config/boot.rb
 gem 'bootsnap', '>= 1.1.0', require: false

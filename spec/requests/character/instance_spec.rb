@@ -51,6 +51,8 @@ RSpec.describe 'Character Instance API', type: :request do
           expect(json[:experience_amount]).to eq(instance.experience_amount)
           expect(json[:template]).to eq(instance.template.id)
           expect(json[:nature]).to eq(instance.nature.id)
+          expect(json[:waiting_trait]).to eq(instance.waiting_trait?)
+          expect(json[:waiting_modifier]).to eq(instance.waiting_modifier?)
           expect(json[:traits].count).to eq(3)
           expect(json[:traits][:power]).to eq(instance.power)
           expect(json[:traits][:control]).to eq(instance.control)
@@ -156,83 +158,203 @@ RSpec.describe 'Character Instance API', type: :request do
   end
 
   describe 'PUT /characters/:id' do
-    let(:valid_attributes) {
-      {
-        additive_trait: 'control',
-        name: 'foooo2'
-      }
-    }
     let(:instance) { create(:character_instance, additive_power: 0, additive_control: 0, additive_swiftness: 1) }
     let(:instance_id) { instance.id }
 
-    context 'when the record exists and the user and level is correct' do
-      before(:each) do
-        instance.user = user
-        instance.experience_amount = Character::Instance.target_experience(10)
-        instance.waiting_trait = true
-        instance.save!
-        put "/characters/#{instance_id}", params: valid_attributes.to_json, headers: headers
+    context 'with an additive trait' do
+      let(:valid_attributes) {
+        {
+            additive_trait: 'control'
+        }
+      }
+
+      context 'when the record exists and the user and level is correct' do
+        before(:each) do
+          instance.user = user
+          instance.experience_amount = Character::Instance.target_experience(10)
+          instance.save!
+          put "/characters/#{instance_id}", params: valid_attributes.to_json, headers: headers
+        end
+
+        it 'returns the object updated' do
+          expect(json[:traits][:control]).to eq(instance.control + 1)
+        end
+
+        it 'updates the record' do
+          expect(instance.additive_control).to eq(0)
+          instance.reload
+          expect(instance.additive_control). to eq(1)
+        end
+
+        it 'returns status code 200' do
+          expect(response).to have_http_status(200)
+        end
       end
 
-      it 'returns the object updated' do
-        expect(json[:name]).to eq(valid_attributes[:name])
-        expect(json[:traits][:control]).to eq(instance.control + 1)
+      context 'when the record exists and the user is incorrect' do
+        before(:each) do
+          put "/characters/#{instance_id}", params: valid_attributes.to_json, headers: headers
+        end
+
+        it 'returns an error message' do
+          expect(json[:message]).to eq("You can't edit an other user's characters")
+        end
+
+        it "doesn't update the record" do
+          expect(instance.additive_control).to eq(0)
+          instance.reload
+          expect(instance.additive_control). to eq(0)
+        end
+
+        it 'returns status code 403' do
+          expect(response).to have_http_status(403)
+        end
       end
 
-      it 'updates the record' do
-        expect(instance.additive_control).to eq(0)
-        instance.reload
-        expect(instance.additive_control). to eq(1)
-        expect(instance.name). to eq(valid_attributes[:name])
-      end
+      context 'when the record exists and the level is incorrect' do
+        before(:each) do
+          instance.user = user
+          instance.experience_amount = Character::Instance.target_experience(5)
+          instance.save!
+          put "/characters/#{instance_id}", params: valid_attributes.to_json, headers: headers
+        end
 
-      it 'returns status code 200' do
-        expect(response).to have_http_status(200)
+        it 'returns an error message' do
+          expect(json[:message]).to eq("Character is not waiting for any trait")
+        end
+
+        it "doesn't update the record" do
+          expect(instance.additive_control).to eq(0)
+          instance.reload
+          expect(instance.additive_control). to eq(0)
+          expect(instance.name).not_to eq(valid_attributes[:name])
+        end
+
+        it 'returns status code 403' do
+          expect(response).to have_http_status(403)
+        end
       end
     end
 
-    context 'when the record exists and the user is incorrect' do
-      before(:each) do
-        put "/characters/#{instance_id}", params: valid_attributes.to_json, headers: headers
+    context 'with an additive modifier' do
+      let(:valid_attributes) {
+        {
+            additive_modifier: 'strength'
+        }
+      }
+
+      context 'when the record exists and the user and level is correct' do
+        before(:each) do
+          instance.user = user
+          instance.experience_amount = Character::Instance.target_experience(10)
+          instance.save!
+          put "/characters/#{instance_id}", params: valid_attributes.to_json, headers: headers
+        end
+
+        it 'returns the object updated' do
+          expect(json[:modifiers][:strength]).to eq(instance.strength + 1)
+        end
+
+        it 'updates the record' do
+          expect(instance.additive_strength).to eq(0)
+          instance.reload
+          expect(instance.additive_strength). to eq(1)
+        end
+
+        it 'returns status code 200' do
+          expect(response).to have_http_status(200)
+        end
       end
 
-      it 'returns an error message' do
-        expect(json[:message]).to eq("You can't edit an other user's characters")
+      context 'when the record exists and the user is incorrect' do
+        before(:each) do
+          put "/characters/#{instance_id}", params: valid_attributes.to_json, headers: headers
+        end
+
+        it 'returns an error message' do
+          expect(json[:message]).to eq("You can't edit an other user's characters")
+        end
+
+        it "doesn't update the record" do
+          expect(instance.additive_strength).to eq(0)
+          instance.reload
+          expect(instance.additive_strength). to eq(0)
+        end
+
+        it 'returns status code 403' do
+          expect(response).to have_http_status(403)
+        end
       end
 
-      it "doesn't update the record" do
-        expect(instance.additive_control).to eq(0)
-        instance.reload
-        expect(instance.additive_control). to eq(0)
-        expect(instance.name).not_to eq(valid_attributes[:name])
-      end
+      context 'when the record exists and the level is incorrect' do
+        before(:each) do
+          instance.user = user
+          instance.experience_amount = Character::Instance.target_experience(2)
+          instance.save!
+          put "/characters/#{instance_id}", params: valid_attributes.to_json, headers: headers
+        end
 
-      it 'returns status code 403' do
-        expect(response).to have_http_status(403)
+        it 'returns an error message' do
+          expect(json[:message]).to eq("Character is not waiting for any modifier")
+        end
+
+        it "doesn't update the record" do
+          expect(instance.additive_strength).to eq(0)
+          instance.reload
+          expect(instance.additive_strength). to eq(0)
+        end
+
+        it 'returns status code 403' do
+          expect(response).to have_http_status(403)
+        end
       end
     end
 
-    context 'when the record exists and the level is incorrect' do
-      before(:each) do
-        instance.user = user
-        instance.experience_amount = Character::Instance.target_experience(5)
-        instance.save!
-        put "/characters/#{instance_id}", params: valid_attributes.to_json, headers: headers
+    context 'with a new name' do
+      let(:valid_attributes) {
+        {
+            name: 'foooo2'
+        }
+      }
+
+      context 'when the record exists and the user is correct' do
+        before(:each) do
+          instance.user = user
+          instance.save!
+          put "/characters/#{instance_id}", params: valid_attributes.to_json, headers: headers
+        end
+
+        it 'returns the object updated' do
+          expect(json[:name]).to eq(valid_attributes[:name])
+        end
+
+        it 'updates the record' do
+          instance.reload
+          expect(instance.name). to eq(valid_attributes[:name])
+        end
+
+        it 'returns status code 200' do
+          expect(response).to have_http_status(200)
+        end
       end
 
-      it 'returns an error message' do
-        expect(json[:message]).to eq("Validation failed: Level does not match the associated class category: level: 5, class category: 1")
-      end
+      context 'when the record exists and the user is incorrect' do
+        before(:each) do
+          put "/characters/#{instance_id}", params: valid_attributes.to_json, headers: headers
+        end
 
-      it "doesn't update the record" do
-        expect(instance.additive_control).to eq(0)
-        instance.reload
-        expect(instance.additive_control). to eq(0)
-        expect(instance.name).not_to eq(valid_attributes[:name])
-      end
+        it 'returns an error message' do
+          expect(json[:message]).to eq("You can't edit an other user's characters")
+        end
 
-      it 'returns status code 422' do
-        expect(response).to have_http_status(422)
+        it "doesn't update the record" do
+          instance.reload
+          expect(instance.name).not_to eq(valid_attributes[:name])
+        end
+
+        it 'returns status code 403' do
+          expect(response).to have_http_status(403)
+        end
       end
     end
   end

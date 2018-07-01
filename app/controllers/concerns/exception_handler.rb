@@ -50,6 +50,6 @@ module ExceptionHandler
   end
 
   def error_bad_request(exception)
-    json_response({ message: exception.message }, :bad_request)    
+    json_response({ message: exception.message }, :bad_request)
   end
 end
