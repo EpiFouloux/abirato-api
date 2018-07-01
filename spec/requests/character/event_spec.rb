@@ -28,7 +28,7 @@ RSpec.describe Character::EventsController, type: :request do
         get "/characters/#{instance.id}/events", headers: valid_headers
       end
 
-      it 'returns character_classes' do
+      it 'returns character events' do
         expect(json).not_to be_empty
         count = instance.events.count
         expect(count).to eq(2) # experience change and changed attributes
