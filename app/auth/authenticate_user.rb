@@ -1,8 +1,8 @@
 class AuthenticateUser
   attr_reader :user
 
-  def initialize(email, password)
-    @email = email
+  def initialize(name, password)
+    @name = name
     @password = password
   end
 
@@ -13,11 +13,11 @@ class AuthenticateUser
 
   private
 
-  attr_reader :email, :password
+  attr_reader :name, :password
 
   # verify user credentials
   def set_user
-    @user = User.find_by(email: email)
+    @user = User.find_by(name: name)
     return @user if @user&.authenticate(password)
     # raise Authentication error if credentials are invalid
     raise(ExceptionHandler::AuthenticationError, Message.invalid_credentials)
