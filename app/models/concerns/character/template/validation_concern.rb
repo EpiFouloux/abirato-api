@@ -10,8 +10,6 @@ module Character::Template::ValidationConcern
     validates :skill_three_id, presence: true
 
     validates_uniqueness_of :name
-    validates_uniqueness_of :icon_id
-    validates_uniqueness_of :picture_id
 
     validate do
       skills.each do |key1, value1|

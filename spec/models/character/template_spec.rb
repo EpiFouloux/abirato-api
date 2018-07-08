@@ -25,44 +25,17 @@ RSpec.describe Character::Template, type: :model do
           create(
             :character_template,
             nature: nature,
-            picture_id: template.picture_id + 1,
-            icon_id: template.icon_id + 1,
             name: template.name
           )
         } .to raise_error(ActiveRecord::RecordInvalid, /Name has already been taken/)
       end
 
-      it 'should raise error with the same picture' do
-        expect {
-          create(
-            :character_template,
-            nature: nature,
-            picture_id: template.picture_id,
-            icon_id: template.icon_id + 1,
-            name: 'bar'
-          )
-        } .to raise_error(ActiveRecord::RecordInvalid, /Picture has already been taken/)
-      end
-
-      it 'should raise error with the same icon' do
-        expect {
-          create(
-            :character_template,
-            nature: nature,
-            picture_id: template.picture_id + 1,
-            icon_id: template.icon_id,
-            name: 'bar'
-          )
-        } .to raise_error(ActiveRecord::RecordInvalid, /Icon has already been taken/)
-      end
 
       it 'should raise error with the same skill' do
         expect {
           create(
             :character_template,
             nature: nature,
-            picture_id: template.picture_id + 1,
-            icon_id: template.icon_id + 1,
             name: 'bar',
             skill_one_id: template.skill_one_id
           )

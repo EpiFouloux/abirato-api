@@ -15,8 +15,7 @@ RSpec.describe 'Character Templates API', type: :request do
       expect(json.size).to eq count
       count.times do |index|
         expect(json[index][:name]).to eq(templates[index].name)
-        expect(json[index][:icon]).to eq(templates[index].icon_id)
-        expect(json[index][:picture]).to eq(templates[index].picture_id)
+        expect(json[index][:nature]).to eq(templates[index].nature.id)
         expect(json[index][:skills]).to eq(templates[index].skills)
       end
     end

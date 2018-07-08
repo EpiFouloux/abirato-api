@@ -7,8 +7,7 @@ module Character::ApiPresenter
         res = {
           id:       template.id,
           name:     template.name,
-          icon:     template.icon_id,
-          picture:  template.picture_id
+          nature:   template.character_nature_id
         }
         res[:skills] = template.skills
         res
