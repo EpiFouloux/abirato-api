@@ -374,8 +374,9 @@ RSpec.describe 'Character Instance API', type: :request do
         delete "/characters/#{instance_id}", params: {}, headers: headers
       end
 
-      it 'returns status code 204' do
-        expect(response).to have_http_status(204)
+      it 'returns status code 200' do
+        expect(response).to have_http_status(200)
+        expect(json[:id]).not_to be_nil
         expect(Character::Instance.count).to eq(0)
       end
     end

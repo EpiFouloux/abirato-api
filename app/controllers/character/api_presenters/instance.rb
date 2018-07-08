@@ -27,6 +27,12 @@ module Character::ApiPresenter
         end
         res
       end
+
+      def format_id(id)
+        {
+            id: id
+        }
+      end
     end
   end
 end

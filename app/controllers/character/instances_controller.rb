@@ -69,8 +69,9 @@ class Character::InstancesController < ApplicationController
 
   # DELETE /characters/:id
   def destroy
+    id = @character.id
     @character.destroy!
-    head :no_content
+    json_response(Character::ApiPresenter::Instance.format_id(id))
   end
 
   private
