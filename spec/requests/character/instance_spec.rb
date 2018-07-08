@@ -29,6 +29,9 @@ RSpec.describe 'Character Instance API', type: :request do
         json.each do |elem|
           expect(elem[:template]).to eq(template.id)
           expect(elem[:classes].count).to eq(1)
+          expect(elem[:classes][0]).to have_key(:id)
+          expect(elem[:classes][0]).to have_key(:name)
+          expect(elem[:classes][0]).to have_key(:category)
         end
       end
 

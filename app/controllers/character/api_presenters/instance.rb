@@ -20,6 +20,7 @@ module Character::ApiPresenter
         res[:classes] =   []
         instance.classes.each do |c|
           res[:classes] << {
+            id: c.id,
             name: c.name,
             category: c.class_type
           }
